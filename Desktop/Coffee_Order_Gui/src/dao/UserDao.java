@@ -57,10 +57,14 @@ public class UserDao implements Dao<User> {
     @Override
     public int update(User t) throws SQLException {
         Connection con = ConnectionOrigin.getCon();
-        String sql = "UPDATE Account SET password = ? WHERE username = ?";
+        String sql = "UPDATE Account SET password = ?, fullname = ?, dateofbirth = ?, address = ?, phonenumber = ? WHERE username = ?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setString(1, t.getPassword());
-        stm.setString(2, t.getUsername());
+        stm.setString(2, t.getFullName());
+        stm.setString(3, t.getDateOfBirth());
+        stm.setString(4, t.getAddress());
+        stm.setString(5, t.getPhoneNumber());
+        stm.setString(6, t.getUsername());
         con.setAutoCommit(false);
         try {
             int result = stm.executeUpdate();

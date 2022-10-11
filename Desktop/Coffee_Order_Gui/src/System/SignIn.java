@@ -7,6 +7,7 @@ package System;
 import dao.UserDao;
 import java.sql.*;
 import javax.swing.*;
+import model.User;
 
 /**
  *
@@ -21,6 +22,7 @@ public class SignIn extends javax.swing.JFrame {
      */
     public SignIn() {
         initComponents();
+        setLocationRelativeTo(null);
         btnSignIn.setEnabled(false);
         btnClear.setEnabled(false);
     }
@@ -43,8 +45,8 @@ public class SignIn extends javax.swing.JFrame {
             btnSignIn.setEnabled(false);
         }
     }
-    
-    public void showBtnClear(){
+
+    public void showBtnClear() {
         String username = jtfUsername.getText();
         String password = String.valueOf(jpwfPassword.getPassword());
         String pin = String.valueOf(jpwfPin.getPassword());
@@ -79,19 +81,26 @@ public class SignIn extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(1600, 900));
+        setUndecorated(true);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 204, 204));
         jLabel1.setText("Coffee With Me");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(711, 55, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setText("Username");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(415, 372, 108, 42));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel3.setText("Password");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(415, 459, 108, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel4.setText("PIN");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(415, 538, 108, -1));
 
         jtfUsername.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jtfUsername.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -99,6 +108,7 @@ public class SignIn extends javax.swing.JFrame {
                 jtfUsernameKeyReleased(evt);
             }
         });
+        getContentPane().add(jtfUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 372, 607, 42));
 
         jpwfPassword.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jpwfPassword.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -106,6 +116,7 @@ public class SignIn extends javax.swing.JFrame {
                 jpwfPasswordKeyReleased(evt);
             }
         });
+        getContentPane().add(jpwfPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 450, 607, 44));
 
         jpwfPin.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jpwfPin.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -113,6 +124,7 @@ public class SignIn extends javax.swing.JFrame {
                 jpwfPinKeyReleased(evt);
             }
         });
+        getContentPane().add(jpwfPin, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 529, 607, 44));
 
         btnSignIn.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnSignIn.setText("Sign In");
@@ -121,6 +133,7 @@ public class SignIn extends javax.swing.JFrame {
                 btnSignInActionPerformed(evt);
             }
         });
+        getContentPane().add(btnSignIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 622, 155, 46));
 
         btnSignUp.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnSignUp.setText("Sign Up");
@@ -129,6 +142,7 @@ public class SignIn extends javax.swing.JFrame {
                 btnSignUpActionPerformed(evt);
             }
         });
+        getContentPane().add(btnSignUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(814, 622, 150, 46));
 
         btnForgotPassword.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnForgotPassword.setText("Forgotten password?");
@@ -137,6 +151,7 @@ public class SignIn extends javax.swing.JFrame {
                 btnForgotPasswordActionPerformed(evt);
             }
         });
+        getContentPane().add(btnForgotPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 713, 607, 43));
 
         btnClear.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnClear.setText("Clear");
@@ -145,108 +160,44 @@ public class SignIn extends javax.swing.JFrame {
                 btnClearActionPerformed(evt);
             }
         });
+        getContentPane().add(btnClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(1047, 622, 150, 46));
 
         btnExit.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        btnExit.setText("X");
+        btnExit.setText("Exit");
         btnExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExitActionPerformed(evt);
             }
         });
+        getContentPane().add(btnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1510, 0, 90, 41));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel5.setText("Log In");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(221, 221, 221)
-                .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(152, 152, 152)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(31, 31, 31)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnForgotPassword, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnSignIn, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(12, 12, 12)
-                                .addComponent(btnSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnClear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jtfUsername)
-                            .addComponent(jpwfPassword)
-                            .addComponent(jpwfPin, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(345, 345, 345)
-                        .addComponent(jLabel5)))
-                .addGap(0, 188, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(jLabel1))
-                    .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel5)
-                .addGap(41, 41, 41)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jtfUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jpwfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(35, 35, 35)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jpwfPin, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(28, 28, 28)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSignIn, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(btnForgotPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(121, 121, 121))
-        );
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(784, 241, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSignInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignInActionPerformed
-        try {
-            // TODO add your handling code here:
-            String username = jtfUsername.getText();
-            String password = String.valueOf(jpwfPassword.getPassword());
-            String pin = String.valueOf(jpwfPin.getPassword());
-            ResultSet rs = new UserDao().getAll();
-            while (rs.next()) {
-                String usernameCheck = rs.getString("username");
-                String passwordCheck = rs.getString("password");
-                if (username.equals(usernameCheck) && password.equals(passwordCheck) && pin.equals(pinRegex)) {
-                    JOptionPane.showMessageDialog(null, "Dang Nhap Thanh Cong!");
-                    setVisible(false);
-                    return;
-                }
+
+        // TODO add your handling code here:
+        String username = jtfUsername.getText();
+        String password = String.valueOf(jpwfPassword.getPassword());
+        String pin = String.valueOf(jpwfPin.getPassword());
+        User user = new UserDao().findByUsername(username);
+        if (user != null) {
+            if (password.equals(user.getPassword()) && pin.equals(pinRegex)) {
+                setVisible(false);
+                new CoffeeWithMe(username).setVisible(true);
+                return;
+            } else {
+                JOptionPane.showMessageDialog(null, "Tai Khoan Hoac Mat Khau Khong Dung!");
+                clear();
+                return;
             }
-            JOptionPane.showMessageDialog(null, "Tai Khoan Hoac Mat Khau Khong Dung!");
-            clear();
-        } catch (SQLException ex) {
-            
         }
+        JOptionPane.showMessageDialog(null, "Tai Khoan Hoac Mat Khau Khong Dung!");
+        clear();
     }//GEN-LAST:event_btnSignInActionPerformed
 
     private void btnSignUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignUpActionPerformed

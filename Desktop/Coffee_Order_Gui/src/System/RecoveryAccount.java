@@ -25,6 +25,7 @@ public class RecoveryAccount extends javax.swing.JFrame {
      */
     public RecoveryAccount() {
         initComponents();
+        setLocationRelativeTo(null);
         btnFindYourAccount.setEnabled(false);
         btnConfirm.setEnabled(false);
         btnClear.setEnabled(false);
@@ -105,23 +106,32 @@ public class RecoveryAccount extends javax.swing.JFrame {
         jpwfConfirmPassword = new javax.swing.JPasswordField();
         btnFindYourAccount = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(1600, 900));
+        setUndecorated(true);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel1.setText("Recovery Account");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 151, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel3.setText("PIN");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(362, 281, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel4.setText("Username");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(362, 350, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel5.setText("Password");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(362, 427, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel6.setText("Confirm Password");
+        jLabel6.setText("Re-type New Password");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(362, 501, -1, -1));
 
         btnConfirm.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnConfirm.setText("Confirm");
@@ -130,6 +140,7 @@ public class RecoveryAccount extends javax.swing.JFrame {
                 btnConfirmActionPerformed(evt);
             }
         });
+        getContentPane().add(btnConfirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(565, 701, 639, -1));
 
         btnClear.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnClear.setText("Clear");
@@ -138,6 +149,7 @@ public class RecoveryAccount extends javax.swing.JFrame {
                 btnClearActionPerformed(evt);
             }
         });
+        getContentPane().add(btnClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(914, 619, 290, -1));
 
         jtfUsername.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jtfUsername.setText("Enter Your Username To Find Your Account!");
@@ -151,6 +163,7 @@ public class RecoveryAccount extends javax.swing.JFrame {
                 jtfUsernameKeyReleased(evt);
             }
         });
+        getContentPane().add(jtfUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(565, 350, 639, -1));
 
         jpwfPin.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jpwfPin.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -158,6 +171,7 @@ public class RecoveryAccount extends javax.swing.JFrame {
                 jpwfPinKeyReleased(evt);
             }
         });
+        getContentPane().add(jpwfPin, new org.netbeans.lib.awtextra.AbsoluteConstraints(565, 281, 639, -1));
 
         jpwfPassword.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jpwfPassword.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -165,6 +179,7 @@ public class RecoveryAccount extends javax.swing.JFrame {
                 jpwfPasswordKeyReleased(evt);
             }
         });
+        getContentPane().add(jpwfPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(565, 424, 639, -1));
 
         jpwfConfirmPassword.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jpwfConfirmPassword.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -172,6 +187,7 @@ public class RecoveryAccount extends javax.swing.JFrame {
                 jpwfConfirmPasswordKeyReleased(evt);
             }
         });
+        getContentPane().add(jpwfConfirmPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(565, 501, 639, -1));
 
         btnFindYourAccount.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnFindYourAccount.setText("Find Your Account");
@@ -180,94 +196,25 @@ public class RecoveryAccount extends javax.swing.JFrame {
                 btnFindYourAccountActionPerformed(evt);
             }
         });
+        getContentPane().add(btnFindYourAccount, new org.netbeans.lib.awtextra.AbsoluteConstraints(565, 619, 290, -1));
 
-        jButton4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jButton4.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jButton4.setText("Back To Sign In");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1199, 6, -1, 48));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(84, 84, 84)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(342, 342, 342))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel5))
-                                .addGap(699, 699, 699))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btnFindYourAccount, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(212, 212, 212)
-                                        .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jpwfPassword, javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jtfUsername, javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jpwfPin, javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jpwfConfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 639, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGap(64, 64, 64))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(269, 269, 269))))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jLabel1)))
-                .addGap(62, 62, 62)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jLabel3)
-                        .addGap(44, 44, 44)
-                        .addComponent(jLabel4)
-                        .addGap(52, 52, 52)
-                        .addComponent(jLabel5)
-                        .addGap(49, 49, 49)
-                        .addComponent(jLabel6))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jpwfPin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(38, 38, 38)
-                        .addComponent(jtfUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(43, 43, 43)
-                        .addComponent(jpwfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(46, 46, 46)
-                        .addComponent(jpwfConfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(87, 87, 87)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnFindYourAccount)
-                    .addComponent(btnClear))
-                .addGap(44, 44, 44)
-                .addComponent(btnConfirm)
-                .addContainerGap(202, Short.MAX_VALUE))
-        );
+        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jButton1.setText("Exit");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1446, 6, 148, 48));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -377,6 +324,14 @@ public class RecoveryAccount extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnConfirmActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        int confirmLogOut = JOptionPane.showConfirmDialog(null, "Are You Sure", "Exit", JOptionPane.YES_NO_OPTION);
+        if(confirmLogOut == 0){
+            System.exit(0);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -416,6 +371,7 @@ public class RecoveryAccount extends javax.swing.JFrame {
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnConfirm;
     private javax.swing.JButton btnFindYourAccount;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;

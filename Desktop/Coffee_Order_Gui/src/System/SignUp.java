@@ -28,6 +28,7 @@ public class SignUp extends javax.swing.JFrame {
      */
     public SignUp() {
         initComponents();
+        setLocationRelativeTo(null);
         btnRegister.setEnabled(false);
         btnClear.setEnabled(false);
     }
@@ -100,6 +101,7 @@ public class SignUp extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jToggleButton1 = new javax.swing.JToggleButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -120,29 +122,42 @@ public class SignUp extends javax.swing.JFrame {
         jpwfConfirmPassword = new javax.swing.JPasswordField();
         jLabel9 = new javax.swing.JLabel();
         jpwfPin = new javax.swing.JPasswordField();
+        jButton1 = new javax.swing.JButton();
+
+        jToggleButton1.setText("jToggleButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(1600, 900));
+        setUndecorated(true);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel1.setText("Sign Up");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(738, 123, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setText("Username");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 225, 153, 31));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel3.setText("Password");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 290, 153, 31));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel4.setText("Full Name");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 421, 153, 31));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel5.setText("Date Of Birth");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 487, 153, 31));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel6.setText("Address");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 536, 153, 31));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel7.setText("Phone Number");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 585, 153, 31));
 
         btnRegister.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnRegister.setText("Register");
@@ -151,6 +166,7 @@ public class SignUp extends javax.swing.JFrame {
                 btnRegisterActionPerformed(evt);
             }
         });
+        getContentPane().add(btnRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(605, 733, 150, -1));
 
         btnClear.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnClear.setText("Clear");
@@ -159,6 +175,7 @@ public class SignUp extends javax.swing.JFrame {
                 btnClearActionPerformed(evt);
             }
         });
+        getContentPane().add(btnClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(1067, 733, 150, -1));
 
         btnExit.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnExit.setText("Back To Sign In");
@@ -167,9 +184,11 @@ public class SignUp extends javax.swing.JFrame {
                 btnExitActionPerformed(evt);
             }
         });
+        getContentPane().add(btnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1213, 6, 220, 39));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel8.setText("Confirm Password");
+        jLabel8.setText("Re-type New Password");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 354, -1, 31));
 
         jtfUsername.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jtfUsername.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -180,6 +199,7 @@ public class SignUp extends javax.swing.JFrame {
                 jtfUsernameKeyTyped(evt);
             }
         });
+        getContentPane().add(jtfUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(605, 225, 612, -1));
 
         jtfFullName.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jtfFullName.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -187,6 +207,7 @@ public class SignUp extends javax.swing.JFrame {
                 jtfFullNameKeyReleased(evt);
             }
         });
+        getContentPane().add(jtfFullName, new org.netbeans.lib.awtextra.AbsoluteConstraints(605, 421, 612, -1));
 
         jtfDateOfBirth.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jtfDateOfBirth.setText("Format: dd/MM/yyyy");
@@ -205,6 +226,7 @@ public class SignUp extends javax.swing.JFrame {
                 jtfDateOfBirthKeyReleased(evt);
             }
         });
+        getContentPane().add(jtfDateOfBirth, new org.netbeans.lib.awtextra.AbsoluteConstraints(605, 487, 612, -1));
 
         jtfAddress.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jtfAddress.addActionListener(new java.awt.event.ActionListener() {
@@ -217,6 +239,7 @@ public class SignUp extends javax.swing.JFrame {
                 jtfAddressKeyReleased(evt);
             }
         });
+        getContentPane().add(jtfAddress, new org.netbeans.lib.awtextra.AbsoluteConstraints(605, 536, 612, -1));
 
         jtfPhoneNumber.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jtfPhoneNumber.setText("Ex: 0123456789");
@@ -235,6 +258,7 @@ public class SignUp extends javax.swing.JFrame {
                 jtfPhoneNumberKeyReleased(evt);
             }
         });
+        getContentPane().add(jtfPhoneNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(605, 585, 612, -1));
 
         jpwfPassword.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jpwfPassword.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -242,6 +266,7 @@ public class SignUp extends javax.swing.JFrame {
                 jpwfPasswordKeyReleased(evt);
             }
         });
+        getContentPane().add(jpwfPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(605, 290, 612, -1));
 
         jpwfConfirmPassword.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jpwfConfirmPassword.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -249,9 +274,11 @@ public class SignUp extends javax.swing.JFrame {
                 jpwfConfirmPasswordKeyReleased(evt);
             }
         });
+        getContentPane().add(jpwfConfirmPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(605, 354, 612, -1));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel9.setText("PIN");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 634, 153, 31));
 
         jpwfPin.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jpwfPin.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -259,96 +286,16 @@ public class SignUp extends javax.swing.JFrame {
                 jpwfPinKeyReleased(evt);
             }
         });
+        getContentPane().add(jpwfPin, new org.netbeans.lib.awtextra.AbsoluteConstraints(605, 634, 612, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(164, 164, 164)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(370, 370, 370)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(92, 92, 92)
-                        .addComponent(jtfUsername))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(92, 92, 92)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(70, 70, 70)
-                                .addComponent(btnRegister)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 300, Short.MAX_VALUE)
-                                .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jpwfPassword)
-                            .addComponent(jpwfConfirmPassword)
-                            .addComponent(jtfFullName, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jtfDateOfBirth, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jtfAddress, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jtfPhoneNumber, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jpwfPin, javax.swing.GroupLayout.Alignment.TRAILING))))
-                .addContainerGap(179, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(83, 83, 83)
-                .addComponent(jLabel1)
-                .addGap(42, 42, 42)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jtfUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(34, 34, 34)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jpwfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(33, 33, 33)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8)
-                    .addComponent(jpwfConfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jtfFullName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(35, 35, 35)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jtfDateOfBirth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jtfAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(jtfPhoneNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(jpwfPin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnRegister)
-                    .addComponent(btnClear))
-                .addGap(70, 70, 70))
-        );
-
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel2, jLabel3, jLabel4, jLabel5, jLabel6, jLabel7, jLabel8, jLabel9, jpwfConfirmPassword, jpwfPassword, jpwfPin, jtfAddress, jtfDateOfBirth, jtfFullName, jtfPhoneNumber, jtfUsername});
+        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jButton1.setText("Exit");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1463, 6, 131, 39));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -489,6 +436,14 @@ public class SignUp extends javax.swing.JFrame {
         showBtnClear();
     }//GEN-LAST:event_jpwfPinKeyReleased
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        int confirmLogOut = JOptionPane.showConfirmDialog(null, "Are You Sure", "Exit", JOptionPane.YES_NO_OPTION);
+        if(confirmLogOut == 0){
+            System.exit(0);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -528,6 +483,7 @@ public class SignUp extends javax.swing.JFrame {
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnRegister;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -537,6 +493,7 @@ public class SignUp extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JPasswordField jpwfConfirmPassword;
     private javax.swing.JPasswordField jpwfPassword;
     private javax.swing.JPasswordField jpwfPin;
