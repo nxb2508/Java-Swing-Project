@@ -5,6 +5,8 @@
 package dao;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import model.User;
 
 /**
@@ -19,12 +21,23 @@ public class UserDao implements Dao<User> {
     }
 
     @Override
-    public ResultSet getAll() throws SQLException {
+    public List getAll() throws SQLException {
         Connection con = ConnectionOrigin.getCon();
         String sql = "SELECT * FROM Account";
         Statement stm = con.createStatement();
         ResultSet rs = stm.executeQuery(sql);
-        return rs;
+        List<User> listUser = new ArrayList<>();
+        while (rs.next()) {
+            String username = rs.getString("username");
+            String password = rs.getString("password");
+            String fullName = rs.getString("fullName");
+            String dateOfBirth = rs.getString("dateofbirth");
+            String address = rs.getString("address");
+            String phoneNumber = rs.getString("phonenumber");
+            User temp = new User(username, password, fullName, dateOfBirth, address, phoneNumber);
+            listUser.add(temp);
+        }
+        return listUser;
     }
 
     @Override
@@ -80,15 +93,15 @@ public class UserDao implements Dao<User> {
     public int delete(User t) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
-    public User findByUsername(String username){
-        try{
+
+    public User findByUsername(String username) {
+        try {
             Connection con = ConnectionOrigin.getCon();
             String sql = "SELECT * FROM Account WHERE username = ?";
             PreparedStatement stm = con.prepareStatement(sql);
             stm.setString(1, username);
             ResultSet rs = stm.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 String password = rs.getString("password");
                 String fullName = rs.getString("fullName");
                 String dateOfBirth = rs.getString("dateofbirth");
