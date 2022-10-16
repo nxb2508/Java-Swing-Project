@@ -18,12 +18,23 @@ import model.Product;
  * @author ADMIN
  */
 public class ManageProduct extends javax.swing.JFrame {
-
+    private String usernameLogin = null;
     /**
      * Creates new form UpdateProduct
      */
+    
+    
     public ManageProduct() {
         initComponents();
+    }
+    
+    public ManageProduct(String username){
+        initComponents();
+        setLocationRelativeTo(null);
+        usernameLogin = username;
+        btnAdd.setEnabled(false);
+        btnUpdate.setEnabled(false);
+        btnDelete.setEnabled(false);
         try {
             showProduct();
         } catch (SQLException ex) {
@@ -37,6 +48,43 @@ public class ManageProduct extends javax.swing.JFrame {
         for (Product temp : listProduct) {
             model.addRow(new Object[]{temp.getId(), temp.getName(), temp.getType(), temp.getPrice()});
         }
+    }
+    
+    public void showBtnUpdate(){
+        String name = jtfName.getText();
+        String type = jtfType.getText();
+        String price = jtfPrice.getText();
+        int index = jtbProduct.getSelectedRow();
+        if(index >= 0){
+            btnUpdate.setEnabled(true);
+        } else {
+            btnUpdate.setEnabled(false);
+        }
+    }
+    
+    public void showBtnAdd(){
+        String name = jtfName.getText();
+        String type = jtfType.getText();
+        String price = jtfPrice.getText();
+        if(!name.equals("") && !type.equals("") && !price.equals("")){
+            btnAdd.setEnabled(true);
+        } else {
+            btnAdd.setEnabled(false);
+        }
+    }
+    
+    public void clear(){
+        jtfName.setText("");
+        jtfType.setText("");
+        jtfPrice.setText("");
+        try {
+            showProduct();
+        } catch (SQLException ex) {
+            Logger.getLogger(ManageProduct.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        btnAdd.setEnabled(false);
+        btnUpdate.setEnabled(false);
+        btnDelete.setEnabled(false);
     }
     
     /**
@@ -59,12 +107,14 @@ public class ManageProduct extends javax.swing.JFrame {
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         btnAdd = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        Refresh = new javax.swing.JButton();
+        btnExit = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1600, 900));
 
-        jtbProduct.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jtbProduct.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jtbProduct.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -73,6 +123,7 @@ public class ManageProduct extends javax.swing.JFrame {
                 "Id", "Name", "Type", "Price"
             }
         ));
+        jtbProduct.setRowHeight(40);
         jtbProduct.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jtbProductMouseClicked(evt);
@@ -86,21 +137,37 @@ public class ManageProduct extends javax.swing.JFrame {
             jtbProduct.getColumnModel().getColumn(3).setMaxWidth(70);
         }
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("Name");
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel2.setText("Type");
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel3.setText("Price");
 
-        jtfName.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jtfName.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jtfName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfNameKeyReleased(evt);
+            }
+        });
 
-        jtfType.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jtfType.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jtfType.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfTypeKeyReleased(evt);
+            }
+        });
 
-        jtfPrice.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jtfPrice.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jtfPrice.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfPriceKeyReleased(evt);
+            }
+        });
 
+        btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnUpdate.setText("Update");
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -108,6 +175,7 @@ public class ManageProduct extends javax.swing.JFrame {
             }
         });
 
+        btnDelete.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnDelete.setText("Delete");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -115,6 +183,7 @@ public class ManageProduct extends javax.swing.JFrame {
             }
         });
 
+        btnAdd.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnAdd.setText("Add");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -122,10 +191,27 @@ public class ManageProduct extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("jButton3");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        Refresh.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        Refresh.setText("Refresh");
+        Refresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                RefreshActionPerformed(evt);
+            }
+        });
+
+        btnExit.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        btnExit.setText("Exit");
+        btnExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExitActionPerformed(evt);
+            }
+        });
+
+        btnBack.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
             }
         });
 
@@ -134,40 +220,51 @@ public class ManageProduct extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(176, 176, 176)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 219, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(188, 188, 188)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel1)
+                        .addGap(48, 48, 48)
+                        .addComponent(jtfName, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addGap(56, 56, 56)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jtfType)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(48, 48, 48)
-                                .addComponent(jtfName, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3))
-                                .addGap(56, 56, 56)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(btnAdd)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(btnUpdate)
-                                        .addGap(105, 105, 105)
-                                        .addComponent(btnDelete))
-                                    .addComponent(jtfType)
-                                    .addComponent(jtfPrice)))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(261, 261, 261)
-                        .addComponent(jButton3)))
-                .addContainerGap(387, Short.MAX_VALUE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnDelete)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(Refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jtfPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
+                .addGap(204, 204, 204))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnBack)
+                .addGap(18, 18, 18)
+                .addComponent(btnExit)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnExit)
+                    .addComponent(btnBack))
+                .addGap(102, 102, 102)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
@@ -179,17 +276,17 @@ public class ManageProduct extends javax.swing.JFrame {
                         .addGap(103, 103, 103)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
-                            .addComponent(jtfPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(72, 72, 72)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnDelete)
-                    .addComponent(btnAdd)
-                    .addComponent(btnUpdate))
-                .addGap(108, 108, 108)
-                .addComponent(jButton3)
-                .addContainerGap(228, Short.MAX_VALUE))
+                            .addComponent(jtfPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(72, 72, 72)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnDelete)
+                            .addComponent(btnAdd)
+                            .addComponent(btnUpdate)
+                            .addComponent(Refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(331, Short.MAX_VALUE))
         );
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {Refresh, btnAdd, btnDelete, btnUpdate});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -204,7 +301,7 @@ public class ManageProduct extends javax.swing.JFrame {
             int result = new ProductDao().save(product);
             if (result == 1) {
                 JOptionPane.showMessageDialog(null, "Them San Pham Thanh Cong");
-                showProduct();
+                clear();
             } else {
                 JOptionPane.showMessageDialog(null, "Them San Pham Khong Thanh Cong");
             }
@@ -213,13 +310,11 @@ public class ManageProduct extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnAddActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
-
     private void jtbProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbProductMouseClicked
         // TODO add your handling code here:
         DefaultTableModel model = (DefaultTableModel) jtbProduct.getModel();
+        btnUpdate.setEnabled(true);
+        btnDelete.setEnabled(true);
         int index = jtbProduct.getSelectedRow();
         String name = (String)model.getValueAt(index, 1);
         String type = (String)model.getValueAt(index, 2);
@@ -227,6 +322,7 @@ public class ManageProduct extends javax.swing.JFrame {
         jtfName.setText(name);
         jtfType.setText(type);
         jtfPrice.setText(String.valueOf(price));
+        
     }//GEN-LAST:event_jtbProductMouseClicked
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
@@ -243,7 +339,7 @@ public class ManageProduct extends javax.swing.JFrame {
             int result = new ProductDao().update(temp);
             if(result == 1){
                 JOptionPane.showMessageDialog(null, "Sua San Pham Thanh Cong");
-                showProduct();
+                clear();
             } else {
                 JOptionPane.showMessageDialog(null, "Da Say Ra Loi");
             }
@@ -266,7 +362,7 @@ public class ManageProduct extends javax.swing.JFrame {
             int result = new ProductDao().delete(temp);
             if(result == 1){
                 JOptionPane.showMessageDialog(null, "Xoa San Pham Thanh Cong");
-                showProduct();
+                clear();
             } else {
                 JOptionPane.showMessageDialog(null, "Da Say Ra Loi");
             }
@@ -274,6 +370,43 @@ public class ManageProduct extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Da Say Ra Loi");
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void jtfNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfNameKeyReleased
+        // TODO add your handling code here:
+        showBtnAdd();
+    }//GEN-LAST:event_jtfNameKeyReleased
+
+    private void jtfTypeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfTypeKeyReleased
+        // TODO add your handling code here:
+        showBtnAdd();
+    }//GEN-LAST:event_jtfTypeKeyReleased
+
+    private void jtfPriceKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfPriceKeyReleased
+        // TODO add your handling code here:
+        showBtnAdd();
+    }//GEN-LAST:event_jtfPriceKeyReleased
+
+    private void RefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshActionPerformed
+        // TODO add your handling code here:
+        clear();
+    }//GEN-LAST:event_RefreshActionPerformed
+
+    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
+        // TODO add your handling code here:
+        int confirmLogOut = JOptionPane.showConfirmDialog(null, "Are You Sure", "Exit", JOptionPane.YES_NO_OPTION);
+        if (confirmLogOut == 0) {
+            System.exit(0);
+        }
+    }//GEN-LAST:event_btnExitActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        int confirmExit = JOptionPane.showConfirmDialog(null, "Are you sure?", "Back", JOptionPane.YES_NO_OPTION);
+        if (confirmExit == 0) {
+            setVisible(false);
+            new CoffeeWithMe(usernameLogin).setVisible(true);
+        }
+    }//GEN-LAST:event_btnBackActionPerformed
 
     /**
      * @param args the command line arguments
@@ -314,10 +447,12 @@ public class ManageProduct extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Refresh;
     private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnBack;
     private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnExit;
     private javax.swing.JButton btnUpdate;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
