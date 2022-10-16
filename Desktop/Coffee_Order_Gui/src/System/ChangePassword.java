@@ -32,7 +32,7 @@ public class ChangePassword extends javax.swing.JFrame {
     }
 
     public ChangePassword(String username) {
-        usernameLogin = username;
+        this.usernameLogin = username;
         initComponents();
         setLocationRelativeTo(null);
         btnUpdatePassword.setEnabled(false);
@@ -92,6 +92,8 @@ public class ChangePassword extends javax.swing.JFrame {
         jpwfCurrentPassword = new javax.swing.JPasswordField();
         jpwfNewPassword = new javax.swing.JPasswordField();
         jpwfRetypeNewPassword = new javax.swing.JPasswordField();
+        btnExit = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1600, 900));
@@ -168,6 +170,24 @@ public class ChangePassword extends javax.swing.JFrame {
         });
         getContentPane().add(jpwfRetypeNewPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 530, 410, -1));
 
+        btnExit.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnExit.setText("Exit");
+        btnExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExitActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1520, 10, -1, -1));
+
+        btnBack.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(1410, 10, -1, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -228,10 +248,27 @@ public class ChangePassword extends javax.swing.JFrame {
                 userDao.update(user);
                 JOptionPane.showMessageDialog(null, "Thay Doi Mat Khau Thanh Cong!");
             } catch (SQLException ex) {
-               
+
             }
         }
     }//GEN-LAST:event_btnUpdatePasswordActionPerformed
+
+    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
+        // TODO add your handling code here:
+        int confirmLogOut = JOptionPane.showConfirmDialog(null, "Are You Sure", "Exit", JOptionPane.YES_NO_OPTION);
+        if (confirmLogOut == 0) {
+            System.exit(0);
+        }
+    }//GEN-LAST:event_btnExitActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        int confirmExit = JOptionPane.showConfirmDialog(null, "Are you sure?", "Back", JOptionPane.YES_NO_OPTION);
+        if (confirmExit == 0) {
+            setVisible(false);
+            new CoffeeWithMe(usernameLogin).setVisible(true);
+        }
+    }//GEN-LAST:event_btnBackActionPerformed
 
     /**
      * @param args the command line arguments
@@ -269,7 +306,9 @@ public class ChangePassword extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBack;
     private javax.swing.JButton btnClear;
+    private javax.swing.JButton btnExit;
     private javax.swing.JButton btnUpdatePassword;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
