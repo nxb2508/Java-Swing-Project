@@ -26,6 +26,7 @@ public class ManageProduct extends javax.swing.JFrame {
     
     public ManageProduct() {
         initComponents();
+        setLocationRelativeTo(null);
     }
     
     public ManageProduct(String username){
@@ -113,6 +114,8 @@ public class ManageProduct extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1600, 900));
+        setUndecorated(true);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jtbProduct.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jtbProduct.setModel(new javax.swing.table.DefaultTableModel(
@@ -137,14 +140,19 @@ public class ManageProduct extends javax.swing.JFrame {
             jtbProduct.getColumnModel().getColumn(3).setMaxWidth(70);
         }
 
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(176, 141, -1, -1));
+
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("Name");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(847, 144, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel2.setText("Type");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(847, 283, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel3.setText("Price");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(847, 424, -1, -1));
 
         jtfName.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jtfName.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -152,6 +160,7 @@ public class ManageProduct extends javax.swing.JFrame {
                 jtfNameKeyReleased(evt);
             }
         });
+        getContentPane().add(jtfName, new org.netbeans.lib.awtextra.AbsoluteConstraints(962, 141, 434, -1));
 
         jtfType.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jtfType.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -159,6 +168,7 @@ public class ManageProduct extends javax.swing.JFrame {
                 jtfTypeKeyReleased(evt);
             }
         });
+        getContentPane().add(jtfType, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 280, 436, -1));
 
         jtfPrice.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jtfPrice.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -166,6 +176,7 @@ public class ManageProduct extends javax.swing.JFrame {
                 jtfPriceKeyReleased(evt);
             }
         });
+        getContentPane().add(jtfPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 421, 436, -1));
 
         btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnUpdate.setText("Update");
@@ -174,6 +185,7 @@ public class ManageProduct extends javax.swing.JFrame {
                 btnUpdateActionPerformed(evt);
             }
         });
+        getContentPane().add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(1043, 531, -1, -1));
 
         btnDelete.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnDelete.setText("Delete");
@@ -182,6 +194,7 @@ public class ManageProduct extends javax.swing.JFrame {
                 btnDeleteActionPerformed(evt);
             }
         });
+        getContentPane().add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(1161, 531, -1, -1));
 
         btnAdd.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnAdd.setText("Add");
@@ -190,6 +203,7 @@ public class ManageProduct extends javax.swing.JFrame {
                 btnAddActionPerformed(evt);
             }
         });
+        getContentPane().add(btnAdd, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 531, -1, -1));
 
         Refresh.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         Refresh.setText("Refresh");
@@ -198,6 +212,7 @@ public class ManageProduct extends javax.swing.JFrame {
                 RefreshActionPerformed(evt);
             }
         });
+        getContentPane().add(Refresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(1276, 531, 120, -1));
 
         btnExit.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnExit.setText("Exit");
@@ -206,6 +221,7 @@ public class ManageProduct extends javax.swing.JFrame {
                 btnExitActionPerformed(evt);
             }
         });
+        getContentPane().add(btnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1522, 6, -1, -1));
 
         btnBack.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnBack.setText("Back");
@@ -214,79 +230,7 @@ public class ManageProduct extends javax.swing.JFrame {
                 btnBackActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(176, 176, 176)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 219, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(48, 48, 48)
-                        .addComponent(jtfName, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addGap(56, 56, 56)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jtfType)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btnAdd)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnUpdate)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnDelete)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(Refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jtfPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 436, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
-                .addGap(204, 204, 204))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnBack)
-                .addGap(18, 18, 18)
-                .addComponent(btnExit)
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnExit)
-                    .addComponent(btnBack))
-                .addGap(102, 102, 102)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(jtfName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(101, 101, 101)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(jtfType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(103, 103, 103)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(jtfPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(72, 72, 72)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnDelete)
-                            .addComponent(btnAdd)
-                            .addComponent(btnUpdate)
-                            .addComponent(Refresh, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(331, Short.MAX_VALUE))
-        );
-
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {Refresh, btnAdd, btnDelete, btnUpdate});
+        getContentPane().add(btnBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(1429, 6, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
