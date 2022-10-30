@@ -13,13 +13,13 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JSpinner;
 import javax.swing.table.*;
 import model.Product;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import dao.BillDao;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 import model.Bill;
 
@@ -28,10 +28,11 @@ import model.Bill;
  * @author ADMIN
  */
 public class PlaceOrder extends javax.swing.JFrame {
+
     private String usernameLogin = null;
     private String phoneNumberRegex = "0([1-9]){9}";
-    
-    private double grandTotal;
+
+    private double total;
 
     /**
      * Creates new form PlaceOrder
@@ -41,16 +42,16 @@ public class PlaceOrder extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         btnAddToCart.setEnabled(false);
         btnGenerateBill.setEnabled(false);
-        grandTotal = 0;
+        total = 0;
     }
-    
+
     public PlaceOrder(String username) {
         initComponents();
         usernameLogin = username;
         setLocationRelativeTo(null);
         btnAddToCart.setEnabled(false);
         btnGenerateBill.setEnabled(false);
-        grandTotal = 0;
+        total = 0;
     }
 
     public void showProduct() throws SQLException {
@@ -62,21 +63,27 @@ public class PlaceOrder extends javax.swing.JFrame {
         }
     }
 
-    public void showBtnGenerateBill(){
+    public void showBtnGenerateBill() {
         String mobileNumber = jtfMobileNumber.getText();
-        if(mobileNumber.matches(phoneNumberRegex)){
-            btnGenerateBill.setEnabled(true);
+        if (mobileNumber.matches(phoneNumberRegex) && !jtfCash.getText().equals("")) {
+            double cash = Double.parseDouble(jtfCash.getText());
+            if (cash - total >= 0) {
+                btnGenerateBill.setEnabled(true);
+            } else {
+                btnGenerateBill.setEnabled(false);
+            }
         } else {
             btnGenerateBill.setEnabled(false);
         }
     }
-    
+
     public void clear() {
         jtfCustomerName.setText("");
         jtfMobileNumber.setText("");
         jtfProductName.setText("");
         jtfPrice.setText("");
-        jtfTotal.setText("");
+        jtfAmount.setText("");
+        jtfCash.setText("");
         jpnQuantity.setValue(0);
         btnAddToCart.setEnabled(false);
     }
@@ -103,9 +110,8 @@ public class PlaceOrder extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jtfProductName = new javax.swing.JTextField();
         jtfPrice = new javax.swing.JTextField();
-        jtfTotal = new javax.swing.JTextField();
+        jtfAmount = new javax.swing.JTextField();
         jpnQuantity = new javax.swing.JSpinner();
-        jButton1 = new javax.swing.JButton();
         btnAddToCart = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtbProduct = new javax.swing.JTable();
@@ -113,10 +119,12 @@ public class PlaceOrder extends javax.swing.JFrame {
         jtbBill = new javax.swing.JTable();
         btnGenerateBill = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
-        jlbGrandTotal = new javax.swing.JLabel();
+        jlbTotal = new javax.swing.JLabel();
         btnNewBill = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
+        jtfCash = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -160,13 +168,13 @@ public class PlaceOrder extends javax.swing.JFrame {
         jLabel8.setText("Quantity");
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel9.setText("Total");
+        jLabel9.setText("Amount");
 
         jtfProductName.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
 
         jtfPrice.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
 
-        jtfTotal.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jtfAmount.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
 
         jpnQuantity.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jpnQuantity.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -174,12 +182,9 @@ public class PlaceOrder extends javax.swing.JFrame {
                 jpnQuantityStateChanged(evt);
             }
         });
-
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton1.setText("Clear");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+        jpnQuantity.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jpnQuantityKeyReleased(evt);
             }
         });
 
@@ -217,7 +222,7 @@ public class PlaceOrder extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Name", "Price", "Quantity", "Total"
+                "Name", "Price", "Quantity", "Amount"
             }
         ));
         jtbBill.setRowHeight(40);
@@ -239,8 +244,8 @@ public class PlaceOrder extends javax.swing.JFrame {
             }
         });
 
-        jlbGrandTotal.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jlbGrandTotal.setText("Grand Total: 0");
+        jlbTotal.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jlbTotal.setText("Total: 0");
 
         btnNewBill.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnNewBill.setText("New Bill");
@@ -266,6 +271,16 @@ public class PlaceOrder extends javax.swing.JFrame {
             }
         });
 
+        jtfCash.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jtfCash.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfCashKeyReleased(evt);
+            }
+        });
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel10.setText("Cash:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -273,63 +288,62 @@ public class PlaceOrder extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(1232, 1232, 1232)
                 .addComponent(btnBack)
                 .addGap(41, 41, 41)
-                .addComponent(btnExit)
-                .addGap(20, 20, 20))
+                .addComponent(btnExit))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(98, 98, 98)
+                .addComponent(jLabel2)
+                .addGap(28, 28, 28)
+                .addComponent(jLabel3)
+                .addGap(339, 339, 339)
+                .addComponent(jLabel4))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(275, 275, 275)
+                .addComponent(jtfCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(76, 76, 76)
+                .addComponent(jtfMobileNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(98, 98, 98)
+                .addComponent(jLabel5)
+                .addGap(235, 235, 235)
+                .addComponent(jLabel6)
+                .addGap(214, 214, 214)
+                .addComponent(jLabel7))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(98, 98, 98)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(98, 98, 98)
-                        .addComponent(jLabel2)
-                        .addGap(28, 28, 28)
-                        .addComponent(jLabel3)
-                        .addGap(339, 339, 339)
-                        .addComponent(jLabel4))
+                        .addComponent(jtfProductName, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(64, 64, 64)
+                        .addComponent(jtfPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(275, 275, 275)
-                        .addComponent(jtfCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(76, 76, 76)
-                        .addComponent(jtfMobileNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(98, 98, 98)
-                        .addComponent(jLabel5)
-                        .addGap(235, 235, 235)
-                        .addComponent(jLabel6)
-                        .addGap(214, 214, 214)
-                        .addComponent(jLabel7))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(98, 98, 98)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addComponent(jLabel8)
+                        .addGap(189, 189, 189)
+                        .addComponent(jLabel9))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jtfCash, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jpnQuantity, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jlbTotal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jtfProductName, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(64, 64, 64)
-                                .addComponent(jtfPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addGap(189, 189, 189)
-                                .addComponent(jLabel9))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jpnQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(64, 64, 64)
-                                .addComponent(jtfTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton1)
-                                .addGap(87, 87, 87)
-                                .addComponent(btnAddToCart)
-                                .addGap(91, 91, 91)
-                                .addComponent(btnDelete))
-                            .addComponent(btnNewBill)
-                            .addComponent(jlbGrandTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 534, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(330, 330, 330)
-                                .addComponent(btnGenerateBill)))
-                        .addGap(6, 6, 6)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 573, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 87, Short.MAX_VALUE))
+                            .addComponent(jtfAmount, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnGenerateBill, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnAddToCart)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnNewBill, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnDelete, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(76, 76, 76)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 573, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -337,9 +351,8 @@ public class PlaceOrder extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnBack)
-                        .addComponent(btnExit)))
+                    .addComponent(btnBack)
+                    .addComponent(btnExit))
                 .addGap(48, 48, 48)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
@@ -357,6 +370,7 @@ public class PlaceOrder extends javax.swing.JFrame {
                 .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jtfProductName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -368,19 +382,22 @@ public class PlaceOrder extends javax.swing.JFrame {
                         .addGap(41, 41, 41)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jpnQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jtfTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(35, 35, 35)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1)
+                            .addComponent(jtfAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(25, 25, 25)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnAddToCart)
                             .addComponent(btnDelete))
-                        .addGap(51, 51, 51)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnNewBill)
-                        .addGap(56, 56, 56)
-                        .addComponent(jlbGrandTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(49, 49, 49)
-                        .addComponent(btnGenerateBill))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(24, 24, 24)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jtfCash, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(37, 37, 37)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jlbTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnGenerateBill))))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
 
         pack();
@@ -391,11 +408,16 @@ public class PlaceOrder extends javax.swing.JFrame {
         String productName = jtfProductName.getText();
         String price = jtfPrice.getText();
         String quantity = String.valueOf(jpnQuantity.getValue());
-        String total = jtfTotal.getText();
-        DefaultTableModel model = (DefaultTableModel) jtbBill.getModel();
-        model.addRow(new Object[]{productName, price, quantity, total});
-        grandTotal += Double.parseDouble(total);
-        jlbGrandTotal.setText("Grand Total: " + grandTotal);
+        String amount = jtfAmount.getText();
+        if (Integer.parseInt(quantity) > 0) {
+            DefaultTableModel model = (DefaultTableModel) jtbBill.getModel();
+            model.addRow(new Object[]{productName, price, quantity, amount});
+            total += Double.parseDouble(amount);
+            jlbTotal.setText("Total: " + total);
+        } else {
+            JOptionPane.showMessageDialog(null, "Vui Long Chon So Luong!");
+        }
+        showBtnGenerateBill();
     }//GEN-LAST:event_btnAddToCartActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
@@ -408,36 +430,67 @@ public class PlaceOrder extends javax.swing.JFrame {
     }//GEN-LAST:event_formComponentShown
 
     private void btnGenerateBillActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateBillActionPerformed
-        try {
-            // TODO add your handling code here:
-            String mobileNumber = jtfMobileNumber.getText();
-            int cnt = new BillDao().countBill(mobileNumber) + 1;
-            String id = mobileNumber + "_" + cnt;
-            String customerName = jtfCustomerName.getText();
-            Bill bill = new Bill(id, customerName, mobileNumber, grandTotal);
-            int result = new BillDao().save(bill);
-            if(result == 1){
-                JOptionPane.showMessageDialog(null, "Tao Bill Thanh Cong!");
-            } else {
-                JOptionPane.showMessageDialog(null, "Tao Bill Thanh Cong!");
+        int amount = jtbBill.getRowCount();
+        if (amount != 0) {
+            try {
+                String mobileNumber = jtfMobileNumber.getText();
+                int cnt = new BillDao().countBill(mobileNumber) + 1;
+                String id = mobileNumber + "_" + cnt;
+                String customerName = jtfCustomerName.getText();
+                Bill bill = new Bill(id, customerName, mobileNumber, total);
+                int result = new BillDao().save(bill);
+                if (result == 1) {
+                    JOptionPane.showMessageDialog(null, "Tao Bill Thanh Cong!");
+                    String path = "C:\\Users\\ADMIN\\Desktop\\SQL BTL JAVA\\" + id + ".pdf";
+                    Document document = new Document();
+                    try {
+                        PdfWriter.getInstance(document, new FileOutputStream(path));
+                        document.open();
+                        Paragraph para = new Paragraph("----------------------------------------------------------  Receipt  -----------------------------------------------------------\n");
+                        para.add("Id: " + id + "\n");
+                        para.add("Customer Name: " + customerName + "\n");
+                        para.add("Mobile Number: " + mobileNumber + "\n");
+                        para.add("Date: " + bill.getOrderDay().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                                + "  Time: " + bill.getOrderDay().format(DateTimeFormatter.ofPattern("HH:mm:ss")) + "\n");
+                        para.add("----------------------------------------------------------------------------------------------------------------------------------\n\n");
+                        document.add(para);
+                        PdfPTable ptb = new PdfPTable(4);
+                        ptb.addCell("Name");
+                        ptb.addCell("Price");
+                        ptb.addCell("Quantity");
+                        ptb.addCell("Total");
+                        DefaultTableModel billModel = (DefaultTableModel) jtbBill.getModel();
+                        for (int i = 0; i < jtbBill.getRowCount(); i++) {
+                            ptb.addCell((String) billModel.getValueAt(i, 0));
+                            ptb.addCell((String) billModel.getValueAt(i, 1));
+                            ptb.addCell((String) billModel.getValueAt(i, 2));
+                            ptb.addCell((String) billModel.getValueAt(i, 3));
+                        }
+                        document.add(ptb);
+                        Paragraph sep = new Paragraph("----------------------------------------------------------------------------------------------------------------------------------\n");
+                        document.add(sep);
+                        Paragraph para2 = new Paragraph("                                                                                                    Total: " + total + "\n");
+                        para2.add("                                                                                                    Cash: " + jtfCash.getText() + "\n");
+                        para2.add("                                                                                                    Change: " + (Double.parseDouble(jtfCash.getText()) - total));
+                        document.add(para2);
+                        document.add(sep);
+                        Paragraph thank = new Paragraph("---------------------------------------------------------- Thank You --------------------------------------------------------");
+                        document.add(thank);
+                    } catch (DocumentException | FileNotFoundException ex) {
+                        JOptionPane.showMessageDialog(null, "Tao File Khong Thanh Cong!!!");
+                        Logger.getLogger(PlaceOrder.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    document.close();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Tao Bill Thanh Cong!");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(PlaceOrder.class.getName()).log(Level.SEVERE, null, ex);
             }
-//        String path = "C:\\Users\\ADMIN\\Desktop\\SQL BTL JAVA\\test.pdf";
-//        Document document = new Document();
-//        try {
-//            PdfWriter.getInstance(document, new FileOutputStream(path));
-//            document.open();
-//            Paragraph para = new Paragraph("Ngo Xuan Bach");
-//            document.add(para);
-//            
-//            JOptionPane.showMessageDialog(null, "Tao File Thanh Cong!!!");
-//        } catch (DocumentException | FileNotFoundException ex) {
-//            JOptionPane.showMessageDialog(null, "Tao File Khong Thanh Cong!!!");
-//            Logger.getLogger(PlaceOrder.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        document.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(PlaceOrder.class.getName()).log(Level.SEVERE, null, ex);
+        } else {
+            JOptionPane.showMessageDialog(null, "Chua Co Mat Hang!!!");
         }
+
     }//GEN-LAST:event_btnGenerateBillActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
@@ -445,11 +498,12 @@ public class PlaceOrder extends javax.swing.JFrame {
         int id = jtbBill.getSelectedRow();
         DefaultTableModel model = (DefaultTableModel) jtbBill.getModel();
         if (id != -1) {
-            String total = (String) model.getValueAt(id, 3);
+            String totalDel = (String) model.getValueAt(id, 3);
             model.removeRow(id);
-            grandTotal -= Double.parseDouble(total);
-            jlbGrandTotal.setText("Grand Total: " + grandTotal);
+            total -= Double.parseDouble(totalDel);
+            jlbTotal.setText("Total: " + total);
         }
+        showBtnGenerateBill();
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void jtbProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbProductMouseClicked
@@ -459,19 +513,14 @@ public class PlaceOrder extends javax.swing.JFrame {
         jtfProductName.setText((String) model.getValueAt(index, 0));
         jtfPrice.setText(String.valueOf(model.getValueAt(index, 1)));
         jpnQuantity.setValue(1);
-        jtfTotal.setText(String.valueOf((int) jpnQuantity.getValue() * Double.parseDouble(jtfPrice.getText())));
+        jtfAmount.setText(String.valueOf((int) jpnQuantity.getValue() * Double.parseDouble(jtfPrice.getText())));
         btnAddToCart.setEnabled(true);
     }//GEN-LAST:event_jtbProductMouseClicked
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        clear();
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jpnQuantityStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jpnQuantityStateChanged
         // TODO add your handling code here:
         if (!jtfPrice.getText().equals("")) {
-            jtfTotal.setText(String.valueOf((int) jpnQuantity.getValue() * Double.parseDouble(jtfPrice.getText())));
+            jtfAmount.setText(String.valueOf((int) jpnQuantity.getValue() * Double.parseDouble(jtfPrice.getText())));
         }
     }//GEN-LAST:event_jpnQuantityStateChanged
 
@@ -481,15 +530,16 @@ public class PlaceOrder extends javax.swing.JFrame {
         DefaultTableModel billModel = (DefaultTableModel) jtbBill.getModel();
         billModel.setRowCount(0);
         btnAddToCart.setEnabled(false);
-        grandTotal = 0;
-        jlbGrandTotal.setText("Grand Total: " + grandTotal);
+        btnGenerateBill.setEnabled(false);
+        total = 0;
+        jlbTotal.setText("Total: " + total);
     }//GEN-LAST:event_btnNewBillActionPerformed
 
     private void jtfMobileNumberKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfMobileNumberKeyReleased
         // TODO add your handling code here:
         showBtnGenerateBill();
         String mobileNumber = jtfMobileNumber.getText();
-        if(mobileNumber.matches(phoneNumberRegex)){
+        if (mobileNumber.matches(phoneNumberRegex)) {
             try {
                 String name = new BillDao().findNameByMobileNumber(mobileNumber);
                 jtfCustomerName.setText(name);
@@ -511,12 +561,24 @@ public class PlaceOrder extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here:jtfCash
         int confirmLogOut = JOptionPane.showConfirmDialog(null, "Are You Sure", "Exit", JOptionPane.YES_NO_OPTION);
         if (confirmLogOut == 0) {
             System.exit(0);
         }
     }//GEN-LAST:event_btnExitActionPerformed
+
+    private void jtfCashKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfCashKeyReleased
+        // TODO add your handling code here:
+        showBtnGenerateBill();
+    }//GEN-LAST:event_jtfCashKeyReleased
+
+    private void jpnQuantityKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jpnQuantityKeyReleased
+        // TODO add your handling code here:
+        if (!jtfPrice.getText().equals("")) {
+            jtfAmount.setText(String.valueOf((int) jpnQuantity.getValue() * Double.parseDouble(jtfPrice.getText())));
+        }
+    }//GEN-LAST:event_jpnQuantityKeyReleased
 
     /**
      * @param args the command line arguments
@@ -560,8 +622,8 @@ public class PlaceOrder extends javax.swing.JFrame {
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnGenerateBill;
     private javax.swing.JButton btnNewBill;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -572,14 +634,15 @@ public class PlaceOrder extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel jlbGrandTotal;
+    private javax.swing.JLabel jlbTotal;
     private javax.swing.JSpinner jpnQuantity;
     private javax.swing.JTable jtbBill;
     private javax.swing.JTable jtbProduct;
+    private javax.swing.JTextField jtfAmount;
+    private javax.swing.JTextField jtfCash;
     private javax.swing.JTextField jtfCustomerName;
     private javax.swing.JTextField jtfMobileNumber;
     private javax.swing.JTextField jtfPrice;
     private javax.swing.JTextField jtfProductName;
-    private javax.swing.JTextField jtfTotal;
     // End of variables declaration//GEN-END:variables
 }
