@@ -5,23 +5,21 @@
 package dao;
 
 import java.sql.*;
+import java.text.ParseException;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.User;
 
 /**
  *
  * @author ADMIN
  */
-public class UserDao implements Dao<User> {
+public class UserDao {
 
-    @Override
-    public User get(int id) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public List getAll() throws SQLException {
+    public List getAll() throws SQLException, DateTimeParseException {
         Connection con = ConnectionOrigin.getCon();
         String sql = "SELECT * FROM Account";
         Statement stm = con.createStatement();
@@ -31,7 +29,7 @@ public class UserDao implements Dao<User> {
             String username = rs.getString("username");
             String password = rs.getString("password");
             String fullName = rs.getString("fullName");
-            String dateOfBirth = rs.getString("dateofbirth");
+            String dateOfBirth = rs.getDate("dateofbirth").toString();
             String address = rs.getString("address");
             String phoneNumber = rs.getString("phonenumber");
             User temp = new User(username, password, fullName, dateOfBirth, address, phoneNumber);
@@ -40,15 +38,14 @@ public class UserDao implements Dao<User> {
         return listUser;
     }
 
-    @Override
-    public int save(User t) throws SQLException {
+    public int save(User t) throws SQLException, ParseException {
         Connection con = ConnectionOrigin.getCon();
         String sql = "INSERT INTO Account(username, password, fullname, dateofbirth, address, phonenumber) VALUES (?,?,?,?,?,?)";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setString(1, t.getUsername());
         stm.setString(2, t.getPassword());
         stm.setString(3, t.getFullName());
-        stm.setString(4, t.getDateOfBirth());
+        stm.setDate(4, new java.sql.Date(t.getDateSql().getTime()));
         stm.setString(5, t.getAddress());
         stm.setString(6, t.getPhoneNumber());
         con.setAutoCommit(false);
@@ -62,19 +59,13 @@ public class UserDao implements Dao<User> {
         }
     }
 
-    @Override
-    public int insert(User t) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public int update(User t) throws SQLException {
+    public int update(User t) throws SQLException, ParseException {
         Connection con = ConnectionOrigin.getCon();
         String sql = "UPDATE Account SET password = ?, fullname = ?, dateofbirth = ?, address = ?, phonenumber = ? WHERE username = ?";
         PreparedStatement stm = con.prepareStatement(sql);
         stm.setString(1, t.getPassword());
         stm.setString(2, t.getFullName());
-        stm.setString(3, t.getDateOfBirth());
+        stm.setDate(3, new java.sql.Date(t.getDateSql().getTime()));
         stm.setString(4, t.getAddress());
         stm.setString(5, t.getPhoneNumber());
         stm.setString(6, t.getUsername());
@@ -89,12 +80,7 @@ public class UserDao implements Dao<User> {
         }
     }
 
-    @Override
-    public int delete(User t) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    public User findByUsername(String username) {
+    public User findByUsername(String username) throws DateTimeParseException {
         try {
             Connection con = ConnectionOrigin.getCon();
             String sql = "SELECT * FROM Account WHERE username = ?";
@@ -104,7 +90,7 @@ public class UserDao implements Dao<User> {
             if (rs.next()) {
                 String password = rs.getString("password");
                 String fullName = rs.getString("fullName");
-                String dateOfBirth = rs.getString("dateofbirth");
+                String dateOfBirth = rs.getDate("dateofbirth").toString();
                 String address = rs.getString("address");
                 String phoneNumber = rs.getString("phonenumber");
                 User user = new User(username, password, fullName, dateOfBirth, address, phoneNumber);

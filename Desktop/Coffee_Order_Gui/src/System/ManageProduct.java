@@ -4,13 +4,16 @@
  */
 package System;
 
+import dao.CategoryDao;
 import dao.ProductDao;
 import java.sql.*;
+import java.text.ParseException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import model.Category;
 import model.Product;
 
 /**
@@ -18,76 +21,107 @@ import model.Product;
  * @author ADMIN
  */
 public class ManageProduct extends javax.swing.JFrame {
+
     private String usernameLogin = null;
+
     /**
      * Creates new form UpdateProduct
      */
-    
-    
     public ManageProduct() {
         initComponents();
         setLocationRelativeTo(null);
-    }
-    
-    public ManageProduct(String username){
-        initComponents();
-        setLocationRelativeTo(null);
-        usernameLogin = username;
-        btnAdd.setEnabled(false);
-        btnUpdate.setEnabled(false);
-        btnDelete.setEnabled(false);
-        try {
-            showProduct();
-        } catch (SQLException ex) {
-        }
-    }
 
-    public void showProduct() throws SQLException {
-        List<Product> listProduct = new ProductDao().getAll();
-        DefaultTableModel model = (DefaultTableModel) jtbProduct.getModel();
-        model.setRowCount(0);
-        for (Product temp : listProduct) {
-            model.addRow(new Object[]{temp.getId(), temp.getName(), temp.getType(), temp.getPrice()});
-        }
-    }
-    
-    public void showBtnUpdate(){
-        String name = jtfName.getText();
-        String type = jtfType.getText();
-        String price = jtfPrice.getText();
-        int index = jtbProduct.getSelectedRow();
-        if(index >= 0){
-            btnUpdate.setEnabled(true);
-        } else {
-            btnUpdate.setEnabled(false);
-        }
-    }
-    
-    public void showBtnAdd(){
-        String name = jtfName.getText();
-        String type = jtfType.getText();
-        String price = jtfPrice.getText();
-        if(!name.equals("") && !type.equals("") && !price.equals("")){
-            btnAdd.setEnabled(true);
-        } else {
-            btnAdd.setEnabled(false);
-        }
-    }
-    
-    public void clear(){
-        jtfName.setText("");
-        jtfType.setText("");
-        jtfPrice.setText("");
+        btnAddCategory.setEnabled(false);
+        btnDeleteCategory.setEnabled(false);
+        btnAddProduct.setEnabled(false);
+        btnUpdateProduct.setEnabled(false);
+        btnDeleteProduct.setEnabled(false);
+
+        jlbCategoryId.setText("");
+        jlbCategoryName.setText("");
         try {
-            showProduct();
+            showProductTable();
+            showCategoryTable();
         } catch (SQLException ex) {
             Logger.getLogger(ManageProduct.class.getName()).log(Level.SEVERE, null, ex);
         }
-        btnAdd.setEnabled(false);
-        btnUpdate.setEnabled(false);
-        btnDelete.setEnabled(false);
     }
-    
+
+    public ManageProduct(String username) {
+        initComponents();
+        setLocationRelativeTo(null);
+        usernameLogin = username;
+
+        btnAddCategory.setEnabled(false);
+        btnDeleteCategory.setEnabled(false);
+        btnAddProduct.setEnabled(false);
+        btnUpdateProduct.setEnabled(false);
+        btnDeleteProduct.setEnabled(false);
+
+        jlbCategoryId.setText("");
+        jlbCategoryName.setText("");
+        try {
+            showProductTable();
+            showCategoryTable();
+        } catch (SQLException ex) {
+            Logger.getLogger(ManageProduct.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void showProductTable() throws SQLException {
+        String productName = jtfSearchProduct.getText();
+        List<Product> listProduct = new ProductDao().getAllProductByName(productName);
+        DefaultTableModel model = (DefaultTableModel) jtbProduct.getModel();
+        model.setRowCount(0);
+        for (Product product : listProduct) {
+            model.addRow(new Object[]{product.getProductId(), product.getProductName(),
+                product.getCategoryId(), product.getPrice()});
+        }
+    }
+
+    public void showCategoryTable() throws SQLException {
+        String categoryName = jtfCategoryName.getText();
+        List<Category> listCategory = new CategoryDao().getAllByCategoryName(categoryName);
+        DefaultTableModel modelCategory = (DefaultTableModel) jtbCategory.getModel();
+        modelCategory.setRowCount(0);
+        for (Category category : listCategory) {
+            modelCategory.addRow(new Object[]{category.getCategoryId(), category.getCategoryName()});
+        }
+        btnDeleteCategory.setEnabled(false);
+    }
+
+    public void showBtnAddCategory() {
+        String categoryName = jtfCategoryName.getText();
+        if (categoryName.equals("")) {
+            btnAddCategory.setEnabled(false);
+        } else {
+            btnAddCategory.setEnabled(true);
+        }
+    }
+
+    public void showBtnAddProduct() {
+        String productName = jtfProductName.getText();
+        String categoryId = jlbCategoryId.getText();
+        String price = jtfPrice.getText();
+        if (productName.equals("") || categoryId.equals("") || price.equals("")) {
+            btnAddProduct.setEnabled(false);
+        } else {
+            btnAddProduct.setEnabled(true);
+        }
+    }
+
+    public void clear() {
+        jlbCategoryId.setText("");
+        jlbCategoryName.setText("");
+        jtfPrice.setText("");
+        jtfProductName.setText("");
+        jtfSearchProduct.setText("");
+        btnAddCategory.setEnabled(false);
+        btnAddProduct.setEnabled(false);
+        btnUpdateProduct.setEnabled(false);
+        btnDeleteProduct.setEnabled(false);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -99,18 +133,27 @@ public class ManageProduct extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jtbProduct = new javax.swing.JTable();
+        btnExit = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jtbCategory = new javax.swing.JTable();
+        jLabel5 = new javax.swing.JLabel();
+        jtfCategoryName = new javax.swing.JTextField();
+        btnAddCategory = new javax.swing.JButton();
+        btnDeleteCategory = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jtfName = new javax.swing.JTextField();
-        jtfType = new javax.swing.JTextField();
+        jtfProductName = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
         jtfPrice = new javax.swing.JTextField();
-        btnUpdate = new javax.swing.JButton();
-        btnDelete = new javax.swing.JButton();
-        btnAdd = new javax.swing.JButton();
-        Refresh = new javax.swing.JButton();
-        btnExit = new javax.swing.JButton();
-        btnBack = new javax.swing.JButton();
+        btnAddProduct = new javax.swing.JButton();
+        btnDeleteProduct = new javax.swing.JButton();
+        btnUpdateProduct = new javax.swing.JButton();
+        jlbCategoryId = new javax.swing.JLabel();
+        jlbCategoryName = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jtfSearchProduct = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1600, 900));
@@ -123,7 +166,7 @@ public class ManageProduct extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Id", "Name", "Type", "Price"
+                "ProductId", "Product Name", "CategoryId", "Price"
             }
         ));
         jtbProduct.setRowHeight(40);
@@ -134,85 +177,13 @@ public class ManageProduct extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jtbProduct);
         if (jtbProduct.getColumnModel().getColumnCount() > 0) {
-            jtbProduct.getColumnModel().getColumn(0).setMaxWidth(40);
+            jtbProduct.getColumnModel().getColumn(0).setMaxWidth(100);
             jtbProduct.getColumnModel().getColumn(1).setMaxWidth(200);
-            jtbProduct.getColumnModel().getColumn(2).setMaxWidth(200);
+            jtbProduct.getColumnModel().getColumn(2).setMaxWidth(100);
             jtbProduct.getColumnModel().getColumn(3).setMaxWidth(70);
         }
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(176, 141, -1, -1));
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setText("Name");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(847, 144, -1, -1));
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel2.setText("Type");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(847, 283, -1, -1));
-
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel3.setText("Price");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(847, 424, -1, -1));
-
-        jtfName.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jtfName.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jtfNameKeyReleased(evt);
-            }
-        });
-        getContentPane().add(jtfName, new org.netbeans.lib.awtextra.AbsoluteConstraints(962, 141, 434, -1));
-
-        jtfType.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jtfType.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jtfTypeKeyReleased(evt);
-            }
-        });
-        getContentPane().add(jtfType, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 280, 436, -1));
-
-        jtfPrice.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jtfPrice.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jtfPriceKeyReleased(evt);
-            }
-        });
-        getContentPane().add(jtfPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 421, 436, -1));
-
-        btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        btnUpdate.setText("Update");
-        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(1043, 531, -1, -1));
-
-        btnDelete.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        btnDelete.setText("Delete");
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(1161, 531, -1, -1));
-
-        btnAdd.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        btnAdd.setText("Add");
-        btnAdd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnAdd, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 531, -1, -1));
-
-        Refresh.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        Refresh.setText("Refresh");
-        Refresh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RefreshActionPerformed(evt);
-            }
-        });
-        getContentPane().add(Refresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(1276, 531, 120, -1));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1064, 203, -1, -1));
 
         btnExit.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnExit.setText("Exit");
@@ -232,108 +203,144 @@ public class ManageProduct extends javax.swing.JFrame {
         });
         getContentPane().add(btnBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(1429, 6, -1, -1));
 
+        jtbCategory.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jtbCategory.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "CategoryId", "CategoryName"
+            }
+        ));
+        jtbCategory.setRowHeight(40);
+        jtbCategory.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtbCategoryMouseClicked(evt);
+            }
+        });
+        jtbCategory.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                jtbCategoryComponentShown(evt);
+            }
+        });
+        jScrollPane2.setViewportView(jtbCategory);
+        if (jtbCategory.getColumnModel().getColumnCount() > 0) {
+            jtbCategory.getColumnModel().getColumn(0).setMaxWidth(80);
+        }
+
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(78, 203, 353, -1));
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel5.setText("Category Name:");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(78, 163, -1, -1));
+
+        jtfCategoryName.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jtfCategoryName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfCategoryNameKeyReleased(evt);
+            }
+        });
+        getContentPane().add(jtfCategoryName, new org.netbeans.lib.awtextra.AbsoluteConstraints(246, 160, 185, -1));
+
+        btnAddCategory.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnAddCategory.setText("Add Category");
+        btnAddCategory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddCategoryActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnAddCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(78, 648, 167, -1));
+
+        btnDeleteCategory.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnDeleteCategory.setText("Delete Category");
+        btnDeleteCategory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteCategoryActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnDeleteCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(78, 699, -1, -1));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setText("Product Name:");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(622, 203, -1, 31));
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel2.setText("Category Id:");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(622, 301, -1, 31));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel3.setText("Category Name:");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(622, 402, -1, 31));
+
+        jtfProductName.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jtfProductName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfProductNameKeyReleased(evt);
+            }
+        });
+        getContentPane().add(jtfProductName, new org.netbeans.lib.awtextra.AbsoluteConstraints(785, 203, 200, -1));
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel4.setText("Price:");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(622, 492, -1, 31));
+
+        jtfPrice.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jtfPrice.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfPriceKeyReleased(evt);
+            }
+        });
+        getContentPane().add(jtfPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(785, 492, 200, -1));
+
+        btnAddProduct.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnAddProduct.setText("Add Product");
+        btnAddProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddProductActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnAddProduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(622, 557, 164, -1));
+
+        btnDeleteProduct.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnDeleteProduct.setText("Delete Product");
+        btnDeleteProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteProductActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnDeleteProduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(622, 648, 164, -1));
+
+        btnUpdateProduct.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnUpdateProduct.setText("Update Product");
+        btnUpdateProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateProductActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnUpdateProduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(622, 599, -1, -1));
+
+        jlbCategoryId.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jlbCategoryId.setText("CategoryId");
+        getContentPane().add(jlbCategoryId, new org.netbeans.lib.awtextra.AbsoluteConstraints(785, 301, 200, 31));
+
+        jlbCategoryName.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jlbCategoryName.setText("CategoryName");
+        getContentPane().add(jlbCategoryName, new org.netbeans.lib.awtextra.AbsoluteConstraints(785, 402, 200, 31));
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel6.setText("Search Product:");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1064, 113, -1, -1));
+
+        jtfSearchProduct.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jtfSearchProduct.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfSearchProductKeyReleased(evt);
+            }
+        });
+        getContentPane().add(jtfSearchProduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(1216, 110, 300, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        // TODO add your handling code here:
-        String name = jtfName.getText();
-        String type = jtfType.getText();
-        double price = Double.parseDouble(jtfPrice.getText());
-        Product product = new Product(name, type, price);
-        try {
-            int result = new ProductDao().save(product);
-            if (result == 1) {
-                JOptionPane.showMessageDialog(null, "Them San Pham Thanh Cong");
-                clear();
-            } else {
-                JOptionPane.showMessageDialog(null, "Them San Pham Khong Thanh Cong");
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Them San Pham Khong Thanh Cong");
-        }
-    }//GEN-LAST:event_btnAddActionPerformed
-
-    private void jtbProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbProductMouseClicked
-        // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel) jtbProduct.getModel();
-        btnUpdate.setEnabled(true);
-        btnDelete.setEnabled(true);
-        int index = jtbProduct.getSelectedRow();
-        String name = (String)model.getValueAt(index, 1);
-        String type = (String)model.getValueAt(index, 2);
-        double price = (double)model.getValueAt(index, 3);
-        jtfName.setText(name);
-        jtfType.setText(type);
-        jtfPrice.setText(String.valueOf(price));
-        
-    }//GEN-LAST:event_jtbProductMouseClicked
-
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel) jtbProduct.getModel();
-        int index = jtbProduct.getSelectedRow();
-        int id = (int)model.getValueAt(index, 0);
-        String name = jtfName.getText();
-        String type = jtfType.getText();
-        double price = Double.parseDouble(jtfPrice.getText());
-        Product temp = new Product(name, type, price);
-        temp.setId(id);
-        try {
-            int result = new ProductDao().update(temp);
-            if(result == 1){
-                JOptionPane.showMessageDialog(null, "Sua San Pham Thanh Cong");
-                clear();
-            } else {
-                JOptionPane.showMessageDialog(null, "Da Say Ra Loi");
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Da Say Ra Loi");
-        }
-    }//GEN-LAST:event_btnUpdateActionPerformed
-
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel) jtbProduct.getModel();
-        int index = jtbProduct.getSelectedRow();
-        int id = (int)model.getValueAt(index, 0);
-        String name = jtfName.getText();
-        String type = jtfType.getText();
-        double price = Double.parseDouble(jtfPrice.getText());
-        Product temp = new Product(name, type, price);
-        temp.setId(id);
-        try {
-            int result = new ProductDao().delete(temp);
-            if(result == 1){
-                JOptionPane.showMessageDialog(null, "Xoa San Pham Thanh Cong");
-                clear();
-            } else {
-                JOptionPane.showMessageDialog(null, "Da Say Ra Loi");
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Da Say Ra Loi");
-        }
-    }//GEN-LAST:event_btnDeleteActionPerformed
-
-    private void jtfNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfNameKeyReleased
-        // TODO add your handling code here:
-        showBtnAdd();
-    }//GEN-LAST:event_jtfNameKeyReleased
-
-    private void jtfTypeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfTypeKeyReleased
-        // TODO add your handling code here:
-        showBtnAdd();
-    }//GEN-LAST:event_jtfTypeKeyReleased
-
-    private void jtfPriceKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfPriceKeyReleased
-        // TODO add your handling code here:
-        showBtnAdd();
-    }//GEN-LAST:event_jtfPriceKeyReleased
-
-    private void RefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshActionPerformed
-        // TODO add your handling code here:
-        clear();
-    }//GEN-LAST:event_RefreshActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         // TODO add your handling code here:
@@ -351,6 +358,210 @@ public class ManageProduct extends javax.swing.JFrame {
             new CoffeeWithMe(usernameLogin).setVisible(true);
         }
     }//GEN-LAST:event_btnBackActionPerformed
+
+    private void jtbCategoryComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jtbCategoryComponentShown
+        try {
+            // TODO add your handling code here:
+            showCategoryTable();
+        } catch (SQLException ex) {
+            Logger.getLogger(ManageProduct.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_jtbCategoryComponentShown
+
+    private void btnAddCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCategoryActionPerformed
+        // TODO add your handling code here:
+        String categoryName = jtfCategoryName.getText();
+        Category category = new Category(categoryName);
+        try {
+            int result = new CategoryDao().save(category);
+            if (result == 1) {
+                JOptionPane.showMessageDialog(null, "Them Loai San Pham Thanh Cong");
+                jtfCategoryName.setText("");
+                btnAddCategory.setEnabled(false);
+            } else {
+                JOptionPane.showMessageDialog(null, "Vui Long Thu Lai");
+            }
+            showCategoryTable();
+            showProductTable();
+            jlbCategoryId.setText("");
+            jlbCategoryName.setText("");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Vui Long Thu Lai");
+        }
+
+    }//GEN-LAST:event_btnAddCategoryActionPerformed
+
+    private void jtbCategoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbCategoryMouseClicked
+        // TODO add your handling code here:
+        int index = jtbCategory.getSelectedRow();
+        DefaultTableModel modelCategory = (DefaultTableModel) jtbCategory.getModel();
+        if (index >= 0) {
+            btnDeleteCategory.setEnabled(true);
+            jlbCategoryId.setText("" + (int) modelCategory.getValueAt(index, 0));
+            jlbCategoryName.setText((String) modelCategory.getValueAt(index, 1));
+        } else {
+            jlbCategoryId.setText("");
+            jlbCategoryName.setText("");
+        }
+        showBtnAddProduct();
+    }//GEN-LAST:event_jtbCategoryMouseClicked
+
+    private void btnDeleteCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteCategoryActionPerformed
+        // TODO add your handling code here:
+        int index = jtbCategory.getSelectedRow();
+        DefaultTableModel modelCategory = (DefaultTableModel) jtbCategory.getModel();
+        if (index >= 0) {
+            int categoryId = (int) modelCategory.getValueAt(index, 0);
+            String categoryName = (String) modelCategory.getValueAt(index, 1);
+            Category category = new Category(categoryName);
+            category.setCategoryId(categoryId);
+            try {
+                int result = new CategoryDao().delete(category);
+                if (result == 1) {
+                    JOptionPane.showMessageDialog(null, "Xoa San Pham Thanh Cong");
+                    btnDeleteCategory.setEnabled(false);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Vui Long Thu Lai");
+                }
+                showCategoryTable();
+                showProductTable();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Vui Long Thu Lai");
+            }
+        }
+    }//GEN-LAST:event_btnDeleteCategoryActionPerformed
+
+    private void jtfCategoryNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfCategoryNameKeyReleased
+        // TODO add your handling code here:
+        showBtnAddCategory();
+        try {
+            showCategoryTable();
+        } catch (SQLException ex) {
+            Logger.getLogger(ManageProduct.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jtfCategoryNameKeyReleased
+
+    private void btnAddProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProductActionPerformed
+        // TODO add your handling code here:
+        String productName = jtfProductName.getText();
+        try {
+            int categoryId = Integer.parseInt(jlbCategoryId.getText());
+            double price = Double.parseDouble(jtfPrice.getText());
+            Product product = new Product(productName, categoryId, price);
+            int result = new ProductDao().save(product);
+            if (result == 1) {
+                JOptionPane.showMessageDialog(null, "Them San Pham Thanh Cong");
+            } else {
+                JOptionPane.showMessageDialog(null, "Khong Them Duoc San Pham!");
+            }
+            clear();
+            showProductTable();
+            showCategoryTable();
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Vui Long Nhap Dung Kieu Du Lieu!");
+            jtfPrice.setText("");
+            btnAddProduct.setEnabled(false);
+        } catch (SQLException sqlEx) {
+            JOptionPane.showMessageDialog(null, "Khong Them Duoc San Pham!");
+            clear();
+        }
+    }//GEN-LAST:event_btnAddProductActionPerformed
+
+    private void jtfProductNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfProductNameKeyReleased
+        showBtnAddProduct();
+    }//GEN-LAST:event_jtfProductNameKeyReleased
+
+    private void btnUpdateProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateProductActionPerformed
+        // TODO add your handling code here:
+        int index = jtbProduct.getSelectedRow();
+        DefaultTableModel productModel = (DefaultTableModel) jtbProduct.getModel();
+        if (index >= 0) {
+            int productId = (int) productModel.getValueAt(index, 0);
+            String productName = jtfProductName.getText();
+            int categoryId = Integer.parseInt(jlbCategoryId.getText());
+            double price = Double.parseDouble(jtfPrice.getText());
+            try {
+                Product product = new Product(productName, categoryId, price);
+                product.setProductId(productId);
+                int result = new ProductDao().update(product);
+                if (result == 1) {
+                    JOptionPane.showMessageDialog(null, "Sua San Pham Thanh Cong");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Sua San Pham Khong Thanh Cong");
+                }
+                clear();
+                showProductTable();
+                showCategoryTable();
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Vui Long Nhap Dung Kieu Du Lieu!");
+            } catch (SQLException sqlEx) {
+                JOptionPane.showMessageDialog(null, "Da Say Ra Loi!");
+            }
+        }
+    }//GEN-LAST:event_btnUpdateProductActionPerformed
+
+    private void jtbProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbProductMouseClicked
+        // TODO add your handling code here:
+        btnUpdateProduct.setEnabled(true);
+        btnDeleteProduct.setEnabled(true);
+        int index = jtbProduct.getSelectedRow();
+        DefaultTableModel productModel = (DefaultTableModel) jtbProduct.getModel();
+        if (index >= 0) {
+            String productName = (String) productModel.getValueAt(index, 1);
+            int categoryId = (int) productModel.getValueAt(index, 2);
+            double price = (double) productModel.getValueAt(index, 3);
+            jtfProductName.setText(productName);
+            jtfPrice.setText(price + "");
+            jlbCategoryId.setText("" + categoryId);
+            try {
+                jlbCategoryName.setText(new CategoryDao().get(categoryId).getCategoryName());
+            } catch (SQLException ex) {
+                Logger.getLogger(ManageProduct.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jtbProductMouseClicked
+
+    private void jtfPriceKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfPriceKeyReleased
+        // TODO add your handling code here:
+        showBtnAddProduct();
+    }//GEN-LAST:event_jtfPriceKeyReleased
+
+    private void jtfSearchProductKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfSearchProductKeyReleased
+        try {
+            // TODO add your handling code here:
+            showProductTable();
+        } catch (SQLException ex) {
+            Logger.getLogger(ManageProduct.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jtfSearchProductKeyReleased
+
+    private void btnDeleteProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteProductActionPerformed
+        // TODO add your handling code here:
+        int index = jtbProduct.getSelectedRow();
+        DefaultTableModel productModel = (DefaultTableModel) jtbProduct.getModel();
+        if (index >= 0) {
+            int productId = (int) productModel.getValueAt(index, 0);
+            String productName = jtfProductName.getText();
+            int categoryId = Integer.parseInt(jlbCategoryId.getText());
+            double price = Double.parseDouble(jtfPrice.getText());
+            try {
+                Product product = new Product(productName, categoryId, price);
+                product.setProductId(productId);
+                int result = new ProductDao().delete(product);
+                if (result == 1) {
+                    JOptionPane.showMessageDialog(null, "Xoa San Pham Thanh Cong");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Xoa San Pham Khong Thanh Cong");
+                }
+                clear();
+                showProductTable();
+                showCategoryTable();
+            } catch (SQLException sqlEx) {
+                JOptionPane.showMessageDialog(null, "Da Say Ra Loi!");
+            }
+        }
+    }//GEN-LAST:event_btnDeleteProductActionPerformed
 
     /**
      * @param args the command line arguments
@@ -391,19 +602,28 @@ public class ManageProduct extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Refresh;
-    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnAddCategory;
+    private javax.swing.JButton btnAddProduct;
     private javax.swing.JButton btnBack;
-    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnDeleteCategory;
+    private javax.swing.JButton btnDeleteProduct;
     private javax.swing.JButton btnExit;
-    private javax.swing.JButton btnUpdate;
+    private javax.swing.JButton btnUpdateProduct;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel jlbCategoryId;
+    private javax.swing.JLabel jlbCategoryName;
+    private javax.swing.JTable jtbCategory;
     private javax.swing.JTable jtbProduct;
-    private javax.swing.JTextField jtfName;
+    private javax.swing.JTextField jtfCategoryName;
     private javax.swing.JTextField jtfPrice;
-    private javax.swing.JTextField jtfType;
+    private javax.swing.JTextField jtfProductName;
+    private javax.swing.JTextField jtfSearchProduct;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,21 +1,33 @@
 package model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Date;
+
 public class User {
 
-    private String username, password, fullName, dateOfBirth, address, phoneNumber;
-
+    private String username, password, fullName, address, phoneNumber;
+    private LocalDate dateOfBirth;
+    
     public User() {
     }
 
-    public User(String username, String password, String fullName, String dateOfBirth, String address, String phoneNumber) {
+    public User(String username, String password, String fullName, String dateOfBirth, String address, String phoneNumber) throws DateTimeParseException {
         this.username = username;
         this.password = password;
         this.fullName = fullName;
-        this.dateOfBirth = dateOfBirth;
+        this.dateOfBirth = LocalDate.parse(dateOfBirth);
         this.address = address;
         this.phoneNumber = phoneNumber;
     }
 
+    public Date getDateSql() throws ParseException{
+        return new SimpleDateFormat("yyyy-MM-dd").parse(dateOfBirth.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+    }
+    
     public String getUsername() {
         return username;
     }
@@ -40,14 +52,6 @@ public class User {
         this.fullName = fullName;
     }
 
-    public String getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(String dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
     public String getAddress() {
         return address;
     }
@@ -64,5 +68,14 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    
 
 }

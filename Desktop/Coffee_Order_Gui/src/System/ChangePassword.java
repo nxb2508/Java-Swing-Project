@@ -6,6 +6,7 @@ package System;
 
 import dao.UserDao;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -248,7 +249,9 @@ public class ChangePassword extends javax.swing.JFrame {
                 userDao.update(user);
                 JOptionPane.showMessageDialog(null, "Thay Doi Mat Khau Thanh Cong!");
             } catch (SQLException ex) {
-
+                JOptionPane.showMessageDialog(null, "Xay Ra Loi Database!");
+            } catch (ParseException ex) {
+                JOptionPane.showMessageDialog(null, "Xay Ra Loi Dinh Dang Ngay Thang!");
             }
         }
     }//GEN-LAST:event_btnUpdatePasswordActionPerformed

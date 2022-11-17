@@ -28,24 +28,24 @@ public class ProductDao implements Dao<Product> {
         ResultSet rs = stm.executeQuery(sql);
         List<Product> listProduct = new ArrayList<>();
         while (rs.next()) {
-            Product temp = new Product();
-            temp.setId(rs.getInt(1));
-            temp.setName(rs.getString(2));
-            temp.setType(rs.getString(3));
-            temp.setPrice(rs.getDouble(4));
-            listProduct.add(temp);
+            Product product = new Product();
+            product.setProductId(rs.getInt("productId"));
+            product.setProductName(rs.getString("productName"));
+            product.setCategoryId(rs.getInt("categoryId"));
+            product.setPrice(rs.getDouble("price"));
+            listProduct.add(product);
         }
         return listProduct;
     }
 
     @Override
-    public int save(Product t) throws SQLException {
-        String sql = "INSERT INTO Product (name, type, price) VALUES (?, ?, ?)";
+    public int save(Product product) throws SQLException {
+        String sql = "INSERT INTO Product (productName, categoryId, price) VALUES (?, ?, ?)";
         con.setAutoCommit(false);
         PreparedStatement stm = con.prepareStatement(sql);
-        stm.setString(1, t.getName());
-        stm.setString(2, t.getType());
-        stm.setDouble(3, t.getPrice());
+        stm.setString(1, product.getProductName());
+        stm.setInt(2, product.getCategoryId());
+        stm.setDouble(3, product.getPrice());
         try {
             int result = stm.executeUpdate();
             con.commit();
@@ -57,19 +57,14 @@ public class ProductDao implements Dao<Product> {
     }
 
     @Override
-    public int insert(Product t) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public int update(Product t) throws SQLException {
-        String sql = "UPDATE Product SET name = ?, type = ?, price = ? where id = ?";
+    public int update(Product product) throws SQLException {
+        String sql = "UPDATE Product SET productName = ?, categoryId = ?, price = ? where productId = ?";
         con.setAutoCommit(false);
         PreparedStatement stm = con.prepareStatement(sql);
-        stm.setString(1, t.getName());
-        stm.setString(2, t.getType());
-        stm.setDouble(3, t.getPrice());
-        stm.setInt(4, t.getId());
+        stm.setString(1, product.getProductName());
+        stm.setInt(2, product.getCategoryId());
+        stm.setDouble(3, product.getPrice());
+        stm.setInt(4, product.getProductId());
         try {
             int result = stm.executeUpdate();
             con.commit();
@@ -81,12 +76,11 @@ public class ProductDao implements Dao<Product> {
     }
 
     @Override
-    public int delete(Product t) throws SQLException {
-        String sql = "DELETE Product where id = ?";
-        Connection con = ConnectionOrigin.getCon();
+    public int delete(Product product) throws SQLException {
+        String sql = "DELETE Product where productId = ?";
         con.setAutoCommit(false);
         PreparedStatement stm = con.prepareStatement(sql);
-        stm.setInt(1, t.getId());
+        stm.setInt(1, product.getProductId());
         try {
             int result = stm.executeUpdate();
             con.commit();
@@ -97,4 +91,20 @@ public class ProductDao implements Dao<Product> {
         }
     }
 
+    public List getAllProductByName(String productName) throws SQLException {
+        String sql = "SELECT * FROM Product WHERE productName LIKE '%" + productName + "%'";
+        Statement stm = con.createStatement();
+        ResultSet rs = stm.executeQuery(sql);
+        List<Product> listProduct = new ArrayList<>();
+        while (rs.next()) {
+            Product product = new Product();
+            product.setProductId(rs.getInt("productId"));
+            product.setProductName(rs.getString("productName"));
+            product.setCategoryId(rs.getInt("categoryId"));
+            product.setPrice(rs.getDouble("price"));
+            listProduct.add(product);
+        }
+        return listProduct;
+    }
+    
 }

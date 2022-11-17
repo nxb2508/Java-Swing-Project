@@ -9,17 +9,16 @@ import java.sql.*;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFormattedTextField;
-import javax.swing.JSpinner;
 import javax.swing.table.*;
 import model.Product;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import dao.BillDao;
+import extension.OpenBillPdf;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.time.format.DateTimeFormatter;
+import java.io.IOException;
 import javax.swing.JOptionPane;
 import model.Bill;
 
@@ -30,7 +29,7 @@ import model.Bill;
 public class PlaceOrder extends javax.swing.JFrame {
 
     private String usernameLogin = null;
-    private String phoneNumberRegex = "0([1-9]){9}";
+    private String phoneNumberRegex = "0[1-9]([0-9]){8}";
 
     private double total;
 
@@ -55,22 +54,27 @@ public class PlaceOrder extends javax.swing.JFrame {
     }
 
     public void showProduct() throws SQLException {
-        List<Product> listProduct = new ProductDao().getAll();
+        List<Product> listProduct = new ProductDao().getAllProductByName(jtfSearch.getText());
         DefaultTableModel model = (DefaultTableModel) jtbProduct.getModel();
         model.setRowCount(0);
-        for (Product temp : listProduct) {
-            model.addRow(new Object[]{temp.getName(), temp.getPrice()});
+        for (Product product : listProduct) {
+            model.addRow(new Object[]{product.getProductName(), product.getPrice()});
         }
     }
 
     public void showBtnGenerateBill() {
         String mobileNumber = jtfMobileNumber.getText();
         if (mobileNumber.matches(phoneNumberRegex) && !jtfCash.getText().equals("")) {
-            double cash = Double.parseDouble(jtfCash.getText());
-            if (cash - total >= 0) {
-                btnGenerateBill.setEnabled(true);
-            } else {
-                btnGenerateBill.setEnabled(false);
+            try {
+                double cash = Double.parseDouble(jtfCash.getText());
+                if (cash - total >= 0) {
+                    btnGenerateBill.setEnabled(true);
+                } else {
+                    btnGenerateBill.setEnabled(false);
+                }
+            } catch (NumberFormatException numberFormatException) {
+                JOptionPane.showMessageDialog(null, "Vui Long Nhap Dung So Tien!!!");
+                jtfCash.setText("");
             }
         } else {
             btnGenerateBill.setEnabled(false);
@@ -125,28 +129,37 @@ public class PlaceOrder extends javax.swing.JFrame {
         btnExit = new javax.swing.JButton();
         jtfCash = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jtfSearch = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(1600, 900));
         setUndecorated(true);
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 formComponentShown(evt);
             }
         });
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel1.setText("Place Order");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 16, -1, -1));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel2.setText("Customer Details:");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(979, 87, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel3.setText("Name");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(979, 143, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel4.setText("Mobile Number");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1335, 143, -1, -1));
 
         jtfCustomerName.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        getContentPane().add(jtfCustomerName, new org.netbeans.lib.awtextra.AbsoluteConstraints(979, 186, 280, -1));
 
         jtfMobileNumber.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jtfMobileNumber.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -154,27 +167,36 @@ public class PlaceOrder extends javax.swing.JFrame {
                 jtfMobileNumberKeyReleased(evt);
             }
         });
+        getContentPane().add(jtfMobileNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(1335, 186, 170, -1));
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel5.setText("Product");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(104, 87, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel6.setText("Name");
+        jLabel6.setText("Product Name");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 272, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel7.setText("Price");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 272, -1, -1));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel8.setText("Quantity");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 366, -1, -1));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel9.setText("Amount");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 366, -1, -1));
 
         jtfProductName.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        getContentPane().add(jtfProductName, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 309, 200, -1));
 
         jtfPrice.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        getContentPane().add(jtfPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 309, 100, -1));
 
         jtfAmount.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        getContentPane().add(jtfAmount, new org.netbeans.lib.awtextra.AbsoluteConstraints(804, 409, 100, -1));
 
         jpnQuantity.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jpnQuantity.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -187,6 +209,7 @@ public class PlaceOrder extends javax.swing.JFrame {
                 jpnQuantityKeyReleased(evt);
             }
         });
+        getContentPane().add(jpnQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 409, 200, -1));
 
         btnAddToCart.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnAddToCart.setText("Add to Cart");
@@ -195,6 +218,7 @@ public class PlaceOrder extends javax.swing.JFrame {
                 btnAddToCartActionPerformed(evt);
             }
         });
+        getContentPane().add(btnAddToCart, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 458, 200, -1));
 
         jtbProduct.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jtbProduct.setModel(new javax.swing.table.DefaultTableModel(
@@ -213,8 +237,10 @@ public class PlaceOrder extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jtbProduct);
         if (jtbProduct.getColumnModel().getColumnCount() > 0) {
-            jtbProduct.getColumnModel().getColumn(1).setMaxWidth(60);
+            jtbProduct.getColumnModel().getColumn(1).setMaxWidth(80);
         }
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(104, 272, 380, 500));
 
         jtbBill.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jtbBill.setModel(new javax.swing.table.DefaultTableModel(
@@ -227,6 +253,13 @@ public class PlaceOrder extends javax.swing.JFrame {
         ));
         jtbBill.setRowHeight(40);
         jScrollPane2.setViewportView(jtbBill);
+        if (jtbBill.getColumnModel().getColumnCount() > 0) {
+            jtbBill.getColumnModel().getColumn(1).setMaxWidth(100);
+            jtbBill.getColumnModel().getColumn(2).setMaxWidth(100);
+            jtbBill.getColumnModel().getColumn(3).setMaxWidth(100);
+        }
+
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(979, 272, 526, 500));
 
         btnGenerateBill.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnGenerateBill.setText("Generate Bill");
@@ -235,6 +268,7 @@ public class PlaceOrder extends javax.swing.JFrame {
                 btnGenerateBillActionPerformed(evt);
             }
         });
+        getContentPane().add(btnGenerateBill, new org.netbeans.lib.awtextra.AbsoluteConstraints(979, 816, 150, -1));
 
         btnDelete.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnDelete.setText("Delete");
@@ -243,9 +277,11 @@ public class PlaceOrder extends javax.swing.JFrame {
                 btnDeleteActionPerformed(evt);
             }
         });
+        getContentPane().add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(1355, 816, 150, -1));
 
         jlbTotal.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jlbTotal.setText("Total: 0");
+        getContentPane().add(jlbTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(1335, 241, 170, 31));
 
         btnNewBill.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnNewBill.setText("New Bill");
@@ -254,6 +290,7 @@ public class PlaceOrder extends javax.swing.JFrame {
                 btnNewBillActionPerformed(evt);
             }
         });
+        getContentPane().add(btnNewBill, new org.netbeans.lib.awtextra.AbsoluteConstraints(1168, 816, 150, -1));
 
         btnBack.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnBack.setText("Back");
@@ -262,6 +299,7 @@ public class PlaceOrder extends javax.swing.JFrame {
                 btnBackActionPerformed(evt);
             }
         });
+        getContentPane().add(btnBack, new org.netbeans.lib.awtextra.AbsoluteConstraints(1395, 16, -1, -1));
 
         btnExit.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnExit.setText("Exit");
@@ -270,6 +308,7 @@ public class PlaceOrder extends javax.swing.JFrame {
                 btnExitActionPerformed(evt);
             }
         });
+        getContentPane().add(btnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1508, 16, -1, -1));
 
         jtfCash.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jtfCash.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -277,128 +316,23 @@ public class PlaceOrder extends javax.swing.JFrame {
                 jtfCashKeyReleased(evt);
             }
         });
+        getContentPane().add(jtfCash, new org.netbeans.lib.awtextra.AbsoluteConstraints(1036, 232, 143, -1));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel10.setText("Cash:");
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(979, 232, -1, 31));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(jLabel1)
-                .addGap(1232, 1232, 1232)
-                .addComponent(btnBack)
-                .addGap(41, 41, 41)
-                .addComponent(btnExit))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(98, 98, 98)
-                .addComponent(jLabel2)
-                .addGap(28, 28, 28)
-                .addComponent(jLabel3)
-                .addGap(339, 339, 339)
-                .addComponent(jLabel4))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(275, 275, 275)
-                .addComponent(jtfCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(76, 76, 76)
-                .addComponent(jtfMobileNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(98, 98, 98)
-                .addComponent(jLabel5)
-                .addGap(235, 235, 235)
-                .addComponent(jLabel6)
-                .addGap(214, 214, 214)
-                .addComponent(jLabel7))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(98, 98, 98)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jtfProductName, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(64, 64, 64)
-                        .addComponent(jtfPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addGap(189, 189, 189)
-                        .addComponent(jLabel9))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel10)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jtfCash, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jpnQuantity, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jlbTotal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jtfAmount, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnGenerateBill, javax.swing.GroupLayout.Alignment.TRAILING)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnAddToCart)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnNewBill, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnDelete, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addGap(76, 76, 76)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 573, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(btnBack)
-                    .addComponent(btnExit))
-                .addGap(48, 48, 48)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addGap(31, 31, 31)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jtfCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtfMobileNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(52, 52, 52)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7))
-                .addGap(12, 12, 12)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jtfProductName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jtfPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(36, 36, 36)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel9))
-                        .addGap(41, 41, 41)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jpnQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jtfAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(25, 25, 25)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnAddToCart)
-                            .addComponent(btnDelete))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnNewBill)
-                        .addGap(24, 24, 24)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jtfCash, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(37, 37, 37)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jlbTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnGenerateBill))))
-                .addContainerGap(78, Short.MAX_VALUE))
-        );
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel11.setText("Search:");
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(104, 235, -1, -1));
+
+        jtfSearch.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jtfSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jtfSearchKeyReleased(evt);
+            }
+        });
+        getContentPane().add(jtfSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(172, 232, 312, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -438,7 +372,8 @@ public class PlaceOrder extends javax.swing.JFrame {
                 String id = mobileNumber + "_" + cnt;
                 String customerName = jtfCustomerName.getText();
                 Bill bill = new Bill(id, customerName, mobileNumber, total);
-                int result = new BillDao().save(bill);
+                BillDao billDao = new BillDao();
+                int result = billDao.save(bill);
                 if (result == 1) {
                     JOptionPane.showMessageDialog(null, "Tao Bill Thanh Cong!");
                     String path = "C:\\Users\\ADMIN\\Desktop\\SQL BTL JAVA\\" + id + ".pdf";
@@ -450,8 +385,8 @@ public class PlaceOrder extends javax.swing.JFrame {
                         para.add("Id: " + id + "\n");
                         para.add("Customer Name: " + customerName + "\n");
                         para.add("Mobile Number: " + mobileNumber + "\n");
-                        para.add("Date: " + bill.getOrderDay().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
-                                + "  Time: " + bill.getOrderDay().format(DateTimeFormatter.ofPattern("HH:mm:ss")) + "\n");
+                        para.add("Date: " + billDao.getOrderDate(id)
+                                + "  Time: " + billDao.getOrderTime(id) + "\n");
                         para.add("----------------------------------------------------------------------------------------------------------------------------------\n\n");
                         document.add(para);
                         PdfPTable ptb = new PdfPTable(4);
@@ -467,25 +402,60 @@ public class PlaceOrder extends javax.swing.JFrame {
                             ptb.addCell((String) billModel.getValueAt(i, 3));
                         }
                         document.add(ptb);
-                        Paragraph sep = new Paragraph("----------------------------------------------------------------------------------------------------------------------------------\n");
+                        Paragraph sep = new Paragraph("--------------------------------"
+                                                    + "---------------------------------"
+                                                    + "---------------------------------"
+                                                    + "--------------------------------"
+                                                      );
                         document.add(sep);
-                        Paragraph para2 = new Paragraph("                                                                                                    Total: " + total + "\n");
-                        para2.add("                                                                                                    Cash: " + jtfCash.getText() + "\n");
-                        para2.add("                                                                                                    Change: " + (Double.parseDouble(jtfCash.getText()) - total));
+                        //-------------
+                        Paragraph para2 = new Paragraph("                                 "
+                                + "                                 "
+                                + "                                 "
+                                + " Total: " + total + "\n");
+                        // Add line Customer's Cash
+                        para2.add("                               "
+                                + "                               "
+                                + "                               "
+                                + "       Cash: " + jtfCash.getText() + "\n");
+
+                        //  Add line Change for Customer
+                        try {
+                            para2.add("                               "
+                                    + "                               "
+                                    + "                               "
+                                    + "       Change: " + (Double.parseDouble(jtfCash.getText()) - total));
+                        } catch (NumberFormatException numberFormatException) {
+                            JOptionPane.showMessageDialog(null, "Vui Long Nhap Dung So Tien!!!");
+                        }
+
                         document.add(para2);
                         document.add(sep);
-                        Paragraph thank = new Paragraph("---------------------------------------------------------- Thank You --------------------------------------------------------");
+                        // End paragraph with Thank You
+                        Paragraph thank = new Paragraph("---------------------------------"
+                                + "-------------------------"
+                                + " Thank You --------------"
+                                + "-------------------------"
+                                + "-----------------");
                         document.add(thank);
                     } catch (DocumentException | FileNotFoundException ex) {
                         JOptionPane.showMessageDialog(null, "Tao File Khong Thanh Cong!!!");
-                        Logger.getLogger(PlaceOrder.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (SQLException ex){
+                        JOptionPane.showMessageDialog(null, "Xay Ra Loi Database!!!");
                     }
                     document.close();
+                    try {
+                         OpenBillPdf.openFile(id);
+                    } catch (IOException ioE) {
+                        JOptionPane.showMessageDialog(null, "Loi Mo File!!!");
+                    } catch (IllegalArgumentException sE){
+                        JOptionPane.showMessageDialog(null, "File Khong Ton Tai!!!");
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Tao Bill Thanh Cong!");
+                    JOptionPane.showMessageDialog(null, "Tao Bill Khong Thanh Cong!");
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(PlaceOrder.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Xay Ra Loi Database!!!");
             }
         } else {
             JOptionPane.showMessageDialog(null, "Chua Co Mat Hang!!!");
@@ -542,7 +512,7 @@ public class PlaceOrder extends javax.swing.JFrame {
         if (mobileNumber.matches(phoneNumberRegex)) {
             try {
                 String name = new BillDao().findNameByMobileNumber(mobileNumber);
-                jtfCustomerName.setText(name);
+                if(name != null) jtfCustomerName.setText(name);
             } catch (SQLException ex) {
                 Logger.getLogger(PlaceOrder.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -579,6 +549,15 @@ public class PlaceOrder extends javax.swing.JFrame {
             jtfAmount.setText(String.valueOf((int) jpnQuantity.getValue() * Double.parseDouble(jtfPrice.getText())));
         }
     }//GEN-LAST:event_jpnQuantityKeyReleased
+
+    private void jtfSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfSearchKeyReleased
+        try {
+            // TODO add your handling code here:
+            showProduct();
+        } catch (SQLException ex) {
+            Logger.getLogger(PlaceOrder.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jtfSearchKeyReleased
 
     /**
      * @param args the command line arguments
@@ -624,6 +603,7 @@ public class PlaceOrder extends javax.swing.JFrame {
     private javax.swing.JButton btnNewBill;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -644,5 +624,6 @@ public class PlaceOrder extends javax.swing.JFrame {
     private javax.swing.JTextField jtfMobileNumber;
     private javax.swing.JTextField jtfPrice;
     private javax.swing.JTextField jtfProductName;
+    private javax.swing.JTextField jtfSearch;
     // End of variables declaration//GEN-END:variables
 }

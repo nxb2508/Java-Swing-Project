@@ -7,6 +7,8 @@ package System;
 import dao.UserDao;
 import javax.swing.*;
 import java.sql.*;
+import java.text.ParseException;
+import java.time.format.DateTimeParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.User;
@@ -241,16 +243,20 @@ public class RecoveryAccount extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Ma PIN Khong Dung!!!");
             jpwfPin.setText("");
         } else {
-            boolean exist = false;
-            User user = new UserDao().findByUsername(username);
-            if (user != null) {
-                exist = true;
-            }
-            if (exist) {
-                JOptionPane.showMessageDialog(null, "Vui Long Nhap Mat Khau Moi");
-            } else {
-                JOptionPane.showMessageDialog(null, "Tai Khoan Khong Ton Tai");
-                jtfUsername.setText("Enter Your Username To Find Your Account!");
+            try {
+                boolean exist = false;
+                User user = new UserDao().findByUsername(username);
+                if (user != null) {
+                    exist = true;
+                }
+                if (exist) {
+                    JOptionPane.showMessageDialog(null, "Vui Long Nhap Mat Khau Moi");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Tai Khoan Khong Ton Tai");
+                    jtfUsername.setText("Enter Your Username To Find Your Account!");
+                }
+            } catch (DateTimeParseException ex) {
+                JOptionPane.showMessageDialog(null, "Da Xay Ra Loi Dinh Dang Ngay Thang!");
             }
         }
     }//GEN-LAST:event_btnFindYourAccountActionPerformed
@@ -319,7 +325,9 @@ public class RecoveryAccount extends javax.swing.JFrame {
                     jtfUsername.setText("");
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(RecoveryAccount.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Xay Ra Loi Database!!!");
+            } catch (ParseException ex) {
+                JOptionPane.showMessageDialog(null, "Xay Ra Loi Dinh Dang Ngay Thang!!!");
             }
         }
     }//GEN-LAST:event_btnConfirmActionPerformed

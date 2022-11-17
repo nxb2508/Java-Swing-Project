@@ -6,6 +6,10 @@ package System;
 
 import dao.UserDao;
 import java.sql.*;
+import java.text.ParseException;
+import java.time.format.DateTimeParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import model.User;
 
@@ -66,7 +70,6 @@ public class SignIn extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -77,7 +80,11 @@ public class SignIn extends javax.swing.JFrame {
         btnSignUp = new javax.swing.JButton();
         btnForgotPassword = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
         btnExit = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -85,22 +92,17 @@ public class SignIn extends javax.swing.JFrame {
         setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 204, 204));
-        jLabel1.setText("Coffee With Me");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(711, 55, -1, -1));
-
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setText("Username");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(415, 372, 108, 42));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 340, 108, 42));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel3.setText("Password");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(415, 459, 108, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 430, 108, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel4.setText("PIN");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(415, 538, 108, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 510, 108, -1));
 
         jtfUsername.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jtfUsername.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -108,7 +110,7 @@ public class SignIn extends javax.swing.JFrame {
                 jtfUsernameKeyReleased(evt);
             }
         });
-        getContentPane().add(jtfUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 372, 607, 42));
+        getContentPane().add(jtfUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 340, 607, 42));
 
         jpwfPassword.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jpwfPassword.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -116,7 +118,7 @@ public class SignIn extends javax.swing.JFrame {
                 jpwfPasswordKeyReleased(evt);
             }
         });
-        getContentPane().add(jpwfPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 450, 607, 44));
+        getContentPane().add(jpwfPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 420, 607, 44));
 
         jpwfPin.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jpwfPin.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -124,7 +126,7 @@ public class SignIn extends javax.swing.JFrame {
                 jpwfPinKeyReleased(evt);
             }
         });
-        getContentPane().add(jpwfPin, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 529, 607, 44));
+        getContentPane().add(jpwfPin, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 500, 607, 44));
 
         btnSignIn.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnSignIn.setText("Sign In");
@@ -133,7 +135,7 @@ public class SignIn extends javax.swing.JFrame {
                 btnSignInActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSignIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 622, 155, 46));
+        getContentPane().add(btnSignIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 590, 155, 46));
 
         btnSignUp.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnSignUp.setText("Sign Up");
@@ -142,7 +144,7 @@ public class SignIn extends javax.swing.JFrame {
                 btnSignUpActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSignUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(814, 622, 150, 46));
+        getContentPane().add(btnSignUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 590, 150, 46));
 
         btnForgotPassword.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnForgotPassword.setText("Forgotten password?");
@@ -151,7 +153,7 @@ public class SignIn extends javax.swing.JFrame {
                 btnForgotPasswordActionPerformed(evt);
             }
         });
-        getContentPane().add(btnForgotPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 713, 607, 43));
+        getContentPane().add(btnForgotPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 680, 607, 43));
 
         btnClear.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnClear.setText("Clear");
@@ -160,7 +162,9 @@ public class SignIn extends javax.swing.JFrame {
                 btnClearActionPerformed(evt);
             }
         });
-        getContentPane().add(btnClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(1047, 622, 150, 46));
+        getContentPane().add(btnClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(1060, 590, 150, 46));
+
+        jPanel1.setLayout(new java.awt.BorderLayout());
 
         btnExit.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnExit.setText("Exit");
@@ -169,11 +173,22 @@ public class SignIn extends javax.swing.JFrame {
                 btnExitActionPerformed(evt);
             }
         });
-        getContentPane().add(btnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1510, 0, 90, 41));
+        jPanel1.add(btnExit, java.awt.BorderLayout.LINE_END);
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1600, 41));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 204, 204));
+        jLabel1.setText("Coffee With Me");
+        jPanel2.add(jLabel1);
+
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 47, 1600, -1));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel5.setText("Log In");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(784, 241, -1, -1));
+        jPanel3.add(jLabel5);
+
+        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 111, 1600, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -184,20 +199,24 @@ public class SignIn extends javax.swing.JFrame {
         String username = jtfUsername.getText();
         String password = String.valueOf(jpwfPassword.getPassword());
         String pin = String.valueOf(jpwfPin.getPassword());
-        User user = new UserDao().findByUsername(username);
-        if (user != null) {
-            if (password.equals(user.getPassword()) && pin.equals(pinRegex)) {
-                setVisible(false);
-                new CoffeeWithMe(username).setVisible(true);
-                return;
-            } else {
-                JOptionPane.showMessageDialog(null, "Tai Khoan Hoac Mat Khau Khong Dung!");
-                clear();
-                return;
+        try {
+            User user = new UserDao().findByUsername(username);
+            if (user != null) {
+                if (password.equals(user.getPassword()) && pin.equals(pinRegex)) {
+                    setVisible(false);
+                    new CoffeeWithMe(username).setVisible(true);
+                    return;
+                } else {
+                    JOptionPane.showMessageDialog(null, "Tai Khoan Hoac Mat Khau Khong Dung!");
+                    clear();
+                    return;
+                }
             }
+            JOptionPane.showMessageDialog(null, "Tai Khoan Hoac Mat Khau Khong Dung!");
+            clear();
+        } catch (DateTimeParseException ex) {
+            JOptionPane.showMessageDialog(null, "Xay Ra Loi Dinh Dang Ngay Thang!");
         }
-        JOptionPane.showMessageDialog(null, "Tai Khoan Hoac Mat Khau Khong Dung!");
-        clear();
     }//GEN-LAST:event_btnSignInActionPerformed
 
     private void btnSignUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignUpActionPerformed
@@ -289,6 +308,9 @@ public class SignIn extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPasswordField jpwfPassword;
     private javax.swing.JPasswordField jpwfPin;
     private javax.swing.JTextField jtfUsername;

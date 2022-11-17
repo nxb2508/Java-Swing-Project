@@ -39,31 +39,18 @@ public class CoffeeWithMe extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnLogOut = new javax.swing.JButton();
-        btnExit = new javax.swing.JButton();
         btnChangePassword = new javax.swing.JButton();
         btnManageProduct = new javax.swing.JButton();
         btnPlaceOrder = new javax.swing.JButton();
+        btnManageBill = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        btnLogOut = new javax.swing.JButton();
+        btnExit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1600, 900));
         setUndecorated(true);
-
-        btnLogOut.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        btnLogOut.setText("Log  Out");
-        btnLogOut.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLogOutActionPerformed(evt);
-            }
-        });
-
-        btnExit.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        btnExit.setText("Exit");
-        btnExit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExitActionPerformed(evt);
-            }
-        });
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnChangePassword.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnChangePassword.setText("Change Password");
@@ -72,6 +59,7 @@ public class CoffeeWithMe extends javax.swing.JFrame {
                 btnChangePasswordActionPerformed(evt);
             }
         });
+        getContentPane().add(btnChangePassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(1071, 332, 250, 250));
 
         btnManageProduct.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnManageProduct.setText("Manage Product");
@@ -80,6 +68,7 @@ public class CoffeeWithMe extends javax.swing.JFrame {
                 btnManageProductActionPerformed(evt);
             }
         });
+        getContentPane().add(btnManageProduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(267, 332, 250, 250));
 
         btnPlaceOrder.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnPlaceOrder.setText("Place Order");
@@ -88,47 +77,36 @@ public class CoffeeWithMe extends javax.swing.JFrame {
                 btnPlaceOrderActionPerformed(evt);
             }
         });
+        getContentPane().add(btnPlaceOrder, new org.netbeans.lib.awtextra.AbsoluteConstraints(535, 332, 250, 250));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(1233, Short.MAX_VALUE)
-                        .addComponent(btnChangePassword))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(btnManageProduct)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(422, 422, 422)
-                .addComponent(btnPlaceOrder)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addComponent(btnManageProduct)))
-                .addGap(56, 56, 56)
-                .addComponent(btnPlaceOrder)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 691, Short.MAX_VALUE)
-                .addComponent(btnChangePassword)
-                .addContainerGap())
-        );
+        btnManageBill.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnManageBill.setText("Manage Bill");
+        btnManageBill.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnManageBillActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnManageBill, new org.netbeans.lib.awtextra.AbsoluteConstraints(803, 332, 250, 250));
+
+        btnLogOut.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnLogOut.setText("Log  Out");
+        btnLogOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogOutActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnLogOut);
+
+        btnExit.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btnExit.setText("Exit");
+        btnExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExitActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnExit);
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1397, 12, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -167,6 +145,12 @@ public class CoffeeWithMe extends javax.swing.JFrame {
         setVisible(false);
         new PlaceOrder(usernameLogin).setVisible(true);
     }//GEN-LAST:event_btnPlaceOrderActionPerformed
+
+    private void btnManageBillActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageBillActionPerformed
+        // TODO add your handling code here:
+        setVisible(false);
+        new ManageBill(usernameLogin).setVisible(true);
+    }//GEN-LAST:event_btnManageBillActionPerformed
 
     /**
      * @param args the command line arguments
@@ -207,7 +191,9 @@ public class CoffeeWithMe extends javax.swing.JFrame {
     private javax.swing.JButton btnChangePassword;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnLogOut;
+    private javax.swing.JButton btnManageBill;
     private javax.swing.JButton btnManageProduct;
     private javax.swing.JButton btnPlaceOrder;
+    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }

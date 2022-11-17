@@ -6,6 +6,8 @@ package System;
 
 import dao.UserDao;
 import java.sql.*;
+import java.text.ParseException;
+import java.time.format.DateTimeParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -18,10 +20,10 @@ import model.User;
 public class SignUp extends javax.swing.JFrame {
 
     private String pinRegex = "nhom9btl";
-    private String dateOfBirthRegex = "\\d\\d/\\d\\d/\\d\\d\\d\\d";
+    private String dateOfBirthRegex = "[0-2][0-9]{3}-[0-1][0-9]-[0-3][0-9]";
     private String usernameRegex = "[a-zA-Z0-9]{6,18}";
     private String passwordRegex = "[a-zA-Z0-9]{6,18}";
-    private String phoneNumberRegex = "0([1-9]){9}";
+    private String phoneNumberRegex = "0[1-9]([0-9]){8}";
 
     /**
      * Creates new form SignUp
@@ -38,7 +40,7 @@ public class SignUp extends javax.swing.JFrame {
         jpwfPassword.setText("");
         jpwfConfirmPassword.setText("");
         jtfFullName.setText("");
-        jtfDateOfBirth.setText("Format: dd/MM/yyyy");
+        jtfDateOfBirth.setText("Format: yyyy-MM-dd");
         jtfAddress.setText("");
         jtfPhoneNumber.setText("Ex: 0123456789");
         jpwfPin.setText("");
@@ -55,7 +57,7 @@ public class SignUp extends javax.swing.JFrame {
         String address = jtfAddress.getText();
         String phoneNumber = jtfPhoneNumber.getText();
         String pin = String.valueOf(jpwfPin.getPassword());
-        if (!confirmPassword.equals("") && !username.equals("") && !password.equals("") && !fullName.equals("") && !dateOfBirth.equals("") && !address.equals("") && !phoneNumber.equals("") && !phoneNumber.equals("Ex: 0123456789") && !dateOfBirth.equals("Format: dd/MM/yyyy") && !pin.equals("")) {
+        if (!confirmPassword.equals("") && !username.equals("") && !password.equals("") && !fullName.equals("") && !dateOfBirth.equals("") && !address.equals("") && !phoneNumber.equals("") && !phoneNumber.equals("Ex: 0123456789") && !dateOfBirth.equals("Format: yyyy-MM-dd") && !pin.equals("")) {
             btnRegister.setEnabled(true);
         } else {
             btnRegister.setEnabled(false);
@@ -77,7 +79,7 @@ public class SignUp extends javax.swing.JFrame {
             btnClear.setEnabled(true);
         } else if (!fullName.equals("")) {
             btnClear.setEnabled(true);
-        } else if (!dateOfBirth.equals("") && !dateOfBirth.equals("Format: dd/MM/yyyy")) {
+        } else if (!dateOfBirth.equals("") && !dateOfBirth.equals("Format: yyyy-MM-dd")) {
             btnClear.setEnabled(true);
         } else if (!address.equals("")) {
             btnClear.setEnabled(true);
@@ -210,7 +212,7 @@ public class SignUp extends javax.swing.JFrame {
         getContentPane().add(jtfFullName, new org.netbeans.lib.awtextra.AbsoluteConstraints(605, 421, 612, -1));
 
         jtfDateOfBirth.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jtfDateOfBirth.setText("Format: dd/MM/yyyy");
+        jtfDateOfBirth.setText("Format: yyyy-MM-dd");
         jtfDateOfBirth.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jtfDateOfBirthMouseClicked(evt);
@@ -324,7 +326,7 @@ public class SignUp extends javax.swing.JFrame {
 
     private void jtfDateOfBirthMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtfDateOfBirthMouseClicked
         // TODO add your handling code here:
-        if (jtfDateOfBirth.getText().equals("Format: dd/MM/yyyy"))
+        if (jtfDateOfBirth.getText().equals("Format: yyyy-MM-dd"))
             jtfDateOfBirth.setText("");
     }//GEN-LAST:event_jtfDateOfBirthMouseClicked
 
@@ -348,9 +350,6 @@ public class SignUp extends javax.swing.JFrame {
         } else if (!password.equals(confirmPassword)) {
             JOptionPane.showMessageDialog(null, "Mat Khau Khong Trung Khop!");
             jpwfConfirmPassword.setText("");
-        } else if (!dateOfBirth.matches(dateOfBirthRegex)) {
-            JOptionPane.showMessageDialog(null, "Ngay Sinh Khong Dung Dinh Dang!");
-            jtfDateOfBirth.setText("");
         } else if (!phoneNumber.matches(phoneNumberRegex)) {
             JOptionPane.showMessageDialog(null, "So Dien Thoai Khong Dung Dinh Dang!");
             jtfPhoneNumber.setText("");
@@ -358,17 +357,25 @@ public class SignUp extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Ma PIN Khong Dung!");
             jpwfPin.setText("");
         } else {
-            User user = new User(username, password, fullName, dateOfBirth, address, phoneNumber);
-            UserDao userDao = new UserDao();
             try {
+                User user = new User(username, password, fullName, dateOfBirth, address, phoneNumber);
+                UserDao userDao = new UserDao();
                 int result = userDao.save(user);
                 if (result == 1) {
                     JOptionPane.showMessageDialog(null, "Tao Tai Khoan Thanh Cong");
                 } else {
                     JOptionPane.showMessageDialog(null, "Tai Khoan Da Ton Tai");
                     jtfUsername.setText("");
+                    btnRegister.setEnabled(false);
                 }
+            } catch (DateTimeParseException ex) {
+                JOptionPane.showMessageDialog(null, "Vui Nhap Nhap Ngay Sinh Dung Dinh Dang!");
+                jtfDateOfBirth.setText("Format: yyyy-MM-dd");
+                btnRegister.setEnabled(false);
             } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Xay Ra Loi Database!");
+            } catch (ParseException ex) {
+                JOptionPane.showMessageDialog(null, "Xay Ra Loi Dinh Dang Cua Ngay Sinh!");
             }
         }
 
@@ -439,7 +446,7 @@ public class SignUp extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         int confirmLogOut = JOptionPane.showConfirmDialog(null, "Are You Sure", "Exit", JOptionPane.YES_NO_OPTION);
-        if(confirmLogOut == 0){
+        if (confirmLogOut == 0) {
             System.exit(0);
         }
     }//GEN-LAST:event_jButton1ActionPerformed

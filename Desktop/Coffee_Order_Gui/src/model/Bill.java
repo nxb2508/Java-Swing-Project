@@ -1,6 +1,8 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.sql.Time;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -12,32 +14,44 @@ import java.time.LocalDateTime;
  */
 public class Bill {
 
-    private String id, customerName, mobileNumber;
-    private LocalDateTime orderDay;
-    private double grandTotal;
+    private String billId, customerName, mobileNumber, orderDate, orderTime;
+    private double total;
 
-    public Bill(String id, String customerName, String mobileNumber, double grandTotal) {
-        this.id = id;
+    public Bill(String billId, String customerName, String mobileNumber, double total) {
+        this.billId = billId;
         this.customerName = customerName;
         this.mobileNumber = mobileNumber;
-        this.orderDay = LocalDateTime.now();
-        this.grandTotal = grandTotal;
+        this.orderDate = null;
+        this.orderTime = null;
+        this.total = total;
     }
 
-    public String getId() {
-        return id;
+    public Bill(String billId, String customerName, String mobileNumber, String orderDate, String orderTime, double total) {
+        this.billId = billId;
+        this.customerName = customerName;
+        this.mobileNumber = mobileNumber;
+        this.orderDate = orderDate;
+        this.orderTime = orderTime;
+        this.total = total;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    
+//        public Bill(String billId, String customerName, String mobileNumber, double total) {
+//        this.billId = billId;
+//        this.customerName = customerName;
+//        this.mobileNumber = mobileNumber;
+//        this.orderDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//        this.orderTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+//        this.dateTime = LocalDateTime.parse(orderDate + " " + orderTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+//        this.total = total;
+//    }
+
+    public String getBillId() {
+        return billId;
     }
 
-    public double getGrandTotal() {
-        return grandTotal;
-    }
-
-    public void setGrandTotal(double grandTotal) {
-        this.grandTotal = grandTotal;
+    public void setBillId(String billId) {
+        this.billId = billId;
     }
 
     public String getCustomerName() {
@@ -56,8 +70,34 @@ public class Bill {
         this.mobileNumber = mobileNumber;
     }
 
-    public LocalDateTime getOrderDay() {
-        return orderDay;
+    public String getOrderDate() {
+        return orderDate;
     }
 
+    public void setOrderDate(String orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public String getOrderTime() {
+        return orderTime;
+    }
+
+    public void setOrderTime(String orderTime) {
+        this.orderTime = orderTime;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+    
+ 
+    
+    public String toString(){
+        return billId + " " + customerName + " " + mobileNumber + " " + orderDate + " " + orderTime + " " + total;
+    }
+    
 }
